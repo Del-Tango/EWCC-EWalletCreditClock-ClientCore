@@ -22,7 +22,7 @@ class Config():
             'log-record-format': '[ %(asctime)s ] %(name)s '
                 '[ %(levelname)s ] - %(filename)s - %(lineno)d: '
                 '%(funcName)s - %(message)s',
-            'log-date-format': "%d-$m-%Y %H:%M:%S",
+            'log-date-format': "%d-%m-%Y %H:%M:%S",
         }
 
         self.cloud_config = {
