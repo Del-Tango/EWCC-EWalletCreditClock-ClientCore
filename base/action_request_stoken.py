@@ -3,5 +3,5 @@ import datetime
 from .action_base import ActionBase
 
 
-class RequestClientID(ActionBase):
+class RequestSessionToken(ActionBase):
     pass
