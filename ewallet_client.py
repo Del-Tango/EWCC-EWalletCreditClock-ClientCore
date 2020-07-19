@@ -240,12 +240,11 @@ class EWalletClientCore():
         if not args:
             if kwargs.get('raw'):
                 return self.response
-            elif kwargs.get('raw') and kwargs['raw'] is False:
-                return self.instruction_set_response
+            return self.instruction_set_response
         resource_map = self.fetch_complete_resource_map()
         if args[0] not in list(resource_map.keys()):
             return self.error_invalid_resource_label(args[0])
-        return resource_map[args[0]](**kwargs)
+        return resource_map[args[0]].last_response(**kwargs)
 
 #   @pysnooper.snoop()
     def execute(self, target_label):

@@ -36,3 +36,44 @@ class TestEwalletClientResponse(unittest.TestCase):
         self.assertTrue(isinstance(response['response'].get('event'), str))
         self.assertTrue(isinstance(response['response'].get('instruction_set_response'), dict))
         return response
+
+    def test_ewcc_response_core_raw_unit(self):
+        print('[ * ]: EWallet Client Core Raw Last Response -')
+        response = self.core.last_response(raw=True)
+        print(
+            "[ I ]: core.last_response(raw=True) \n"
+            + "[ O ]: " + str(response) + '\n'
+        )
+        self.assertTrue(response)
+        return response
+
+    def test_ewcc_response_core_execution_unit(self):
+        print('[ * ]: EWallet Client Core Execution Last Response -')
+        response = self.core.last_response(raw=False)
+        print(
+            "[ I ]: core.last_response(raw=False) \n"
+            + "[ O ]: " + str(response) + '\n'
+        )
+        self.assertTrue(isinstance(response, dict))
+        self.assertEqual(len(response), 2)
+        self.assertFalse(response.get('failed'))
+        return response
+
+    def test_ewcc_response_action_request_client_id_unit(self):
+        print('[ * ]: EWallet Client Core Action Last Response -')
+        response = self.core.last_response('RequestClientID')
+        print(
+            "[ I ]: core.last_response('RequestClientID') \n"
+            + "[ O ]: " + str(response) + '\n'
+        )
+        self.assertTrue(isinstance(response, dict))
+        self.assertEqual(len(response), 2)
+        self.assertFalse(response.get('failed'))
+        return response
+
+
+
+
+
+
+

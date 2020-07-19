@@ -210,7 +210,7 @@ class ResourceBase():
 
     # CORE
 
-    def response(self, raw=False):
+    def last_response(self, raw=False):
         log.debug('')
         return self.instruction_set_response if not raw else self.response
 
