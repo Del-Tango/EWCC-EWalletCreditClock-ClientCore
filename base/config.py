@@ -32,9 +32,23 @@ class Config():
             'ewsc-url': config['CloudDetails'].get('ewsc_url') or
                 '/ewallet/instruction-set',
             'ewsc-cert': config['CloudDetails'].get('ewsc_cert'),
-            'ewsc-creds': config['CloudDetails'].get('ewsc_creds') # Probable base64 encoded <login>:<pass>
+            'ewsc-master-login': config['CloudDetails'].get('ewsc_master_login'),
+            'ewsc-master-sequence': config['CloudDetails'].get('ewsc_master_login'), # Probably base64 encoded <login>:<pass>
         }
 
+    # FETCHERS
+
+    def _fetch_ewsc_certificate(self):
+        self.log.debug('')
+        return self.cloud_config.get('ewsc-cert')
+
+    def _fetch_ewsc_master_login(self):
+        self.log.debug('')
+        return self.cloud_config.get('ewsc-master-login')
+
+    def _fetch_ewsc_master_sequence(self):
+        self.log.debug('')
+        return self.cloud_config.get('ewsc-master-sequence')
 
     def fetch_settings(self):
         self.log.debug('')
@@ -42,6 +56,33 @@ class Config():
             'config_timestamp': self.config_timestamp,
             'config_file': self.config_file,
             'log_config': self.log_config,
-            'cloud_config': self.cloud_config,
+            'cloud_config': self.sanitize_cloud_config_section(),
         }
         return settings
+
+    # SANITIZERS
+
+    def sanitize_cloud_config_section(self):
+        self.log.debug('')
+        cloud_config = self.cloud_config.copy()
+        for item in ['ewsc-cert', 'ewsc-master-login', 'ewsc-master-sequence']:
+            del cloud_config[item]
+        return cloud_config
+
+    # CORE
+
+    def set(self, value_set):
+        self.log.debug('')
+        fields_set = []
+        for field in value_set:
+            try:
+                setattr(self, field, value_set[field])
+                fields_set.append(field)
+            except:
+                self.warning_could_not_set_client_core_attribute(field)
+        return self.warning_no_client_core_fields_set(value_set) \
+            if not fields_set else {
+                'failed': False,
+                'updated': fields_set,
+                'config': self.fetch_settings(),
+            }

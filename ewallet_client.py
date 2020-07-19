@@ -45,6 +45,12 @@ class EWalletClientCore():
 
     # FETCHERS
 
+    def fetch_complete_resource_map(self):
+        log.debug('')
+        resource_map = self.actions.copy()
+        resource_map.update(self.events)
+        return resource_map
+
     def fetch_ewallet_client_core_values(self):
         log.debug('')
         value_set = {
@@ -176,17 +182,56 @@ class EWalletClientCore():
 
     # CORE
 
+    def response(self, *args, **kwargs):
+        log.debug('TODO')
+
+
+    def execute(self, target_label):
+        log.debug('')
+        resource_map = self.fetch_complete_resource_map()
+        if target_label not in resource_map:
+            return self.error_invalid_target_label(target_label)
+        return resource_map[target_label].execute()
+
     # TODO
     def new_issue_report(self, *args, **kwargs):
         log.debug('TODO - Not yet implemented.')
-    def set(self, *args, **kwargs):
-        log.debug('TODO')
-    def exec(self, *args, **kwargs):
-        log.debug('TODO')
     def previous(self, *args, **kwargs):
         log.debug('TODO')
     def purge(self, *args, **kwargs):
         log.debug('TODO')
+
+    def set_client_core_config_values(self, value_set):
+        log.debug('')
+        return self.config.set(value_set)
+
+    def set_client_core_values(self, value_set):
+        log.debug('')
+        fields_set = []
+        for field in value_set:
+            try:
+                setattr(self, field, value_set[field])
+                fields_set.append(field)
+            except:
+                self.warning_could_not_set_client_core_attribute(field)
+        return self.warning_no_client_core_fields_set(value_set) \
+            if not fields_set else {
+                'failed': False,
+                'updated': fields_set,
+                'state': self.fetch_ewallet_client_core_values(),
+            }
+
+    def set_values(self, target_label, value_set):
+        log.debug('')
+        if not target_label or isinstance(target_label, str) and \
+                target_label == 'Core':
+            return self.set_client_core_values(value_set)
+        if target_label == 'Config':
+            return self.set_client_core_config_values(value_set)
+        resource_map = self.fetch_complete_resource_map()
+        if target_label not in resource_map:
+            return self.error_invalid_target_label(target_label)
+        return resource_map[target_label].set(value_set)
 
     def new_handlers(self, *args, **kwargs):
         log.debug('')
@@ -212,7 +257,7 @@ class EWalletClientCore():
             if not item:
                 continue
             compute = self.compute_setup_event_handler({
-                item: event_map[item]()
+                item: event_map[item](config=self.config)
             })
             if not compute:
                 self.warning_could_not_setup_event_handler(item)
@@ -222,11 +267,17 @@ class EWalletClientCore():
         event_handlers = self.events
         if setup_count != len(handler_set):
             self.warning_not_all_specified_event_handlers_setup(event_handlers)
-        return event_handlers
+        return {
+            'failed': False,
+            'events': event_handlers,
+        }
 
     def state(self, *args, **kwargs):
         log.debug('')
-        return self.fetch_ewallet_client_core_values()
+        return {
+            'failed': False,
+            'state': self.fetch_ewallet_client_core_values(),
+        }
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def setup_action_handlers(self, actions='all', *args, **kwargs):
@@ -239,7 +290,7 @@ class EWalletClientCore():
             if not item:
                 continue
             compute = self.compute_setup_action_handler({
-                item: action_map[item]()
+                item: action_map[item](config=self.config)
             })
             if not compute:
                 self.warning_could_not_setup_action_handler(item)
@@ -249,11 +300,15 @@ class EWalletClientCore():
         action_handlers = self.actions
         if setup_count != len(handler_set):
             self.warning_not_all_specified_action_handlers_setup(action_handlers)
-        return action_handlers
+        return {
+            'failed': False,
+            'actions': action_handlers,
+        }
 
     def setup_all_handlers(self, *args, **kwargs):
         log.debug('')
         return {
+            'failed': False,
             'actions': self.setup_action_handlers(actions='all'),
             'events': self.setup_event_handlers(events='all'),
         }
@@ -275,73 +330,130 @@ class EWalletClientCore():
                 continue
             handlers[item](*args, **kwargs)
         return {
+            'failed': False,
             'actions': self.actions,
             'events': self.events,
         }
 
     # WARNINGS
 
+    def warning_could_not_set_client_core_attribute(self, attribute):
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. '
+                'Could not set client core attribute {}.'.format(attribute),
+        }
+        log.warning(core_response['warning'])
+        return core_response
+
+    def warning_no_client_core_fields_set(self, value_set):
+        core_response = {
+            'failed': True,
+            'warning': 'No client core fields updated from value set {}.'\
+                .format(value_set),
+        }
+        log.warning(core_response['warning'])
+        return core_response
+
     def warning_could_not_setup_event_handler(self, event_label):
-        log.warning(
-            'Could not setup event handler for client event {}.'\
-            .format(event_label),
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'warning': 'Could not setup event handler for client event {}.'\
+                .format(event_label),
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     def warning_not_all_specified_event_handlers_setup(self, event_handlers):
-        log.warning(
-            'Something went wrong. Could not setup all specified event handlers. '
-            'Details: {}'.format(event_handlers),
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. '
+                'Could not setup all specified event handlers. '
+                'Details: {}'.format(event_handlers),
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     def warning_invalid_handler(self, handler_label):
-        log.warning('Invalid handler {}.'.format(handler_label))
-        return False
+        core_response = {
+            'failed': True,
+            'warning': 'Invalid handler {}.'.format(handler_label),
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     def warning_could_not_setup_action_handler(self, action_label):
-        log.warning(
-            'Could not setup action handler for client action {}.'\
-            .format(action_label)
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'warning': 'Could not setup action handler for client action {}.'\
+                .format(action_label),
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     def warning_not_all_specified_action_handlers_setup(self, action_handlers):
-        log.warning(
-            'Something went wrong. Could not setup all specified action handlers. '
-            'Details: {}'.format(action_handlers)
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. '
+                'Could not setup all specified action handlers. '
+                'Details: {}'.format(action_handlers),
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     # ERRORS
 
+    def error_invalid_target_label(self, target_label):
+        core_response = {
+            'failed': True,
+            'error': 'Invalid target label {}.'.format(target_label),
+        }
+        log.error(core_response['error'])
+        return core_response
+
     def error_could_not_update_event_handler_set(extension):
-        log.error(
-            'Something went wrong. Could not update EWCC event handler set. '\
-            'Details: {}'.format(extension),
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                'Could not update EWCC event handler set. '\
+                'Details: {}'.format(extension),
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_could_not_update_action_handler_set(extension):
-        log.error(
-            'Something went wrong. Could not update EWCC action handler set. '\
-            'Details: {}'.format(extension),
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                'Could not update EWCC action handler set. '\
+                'Details: {}'.format(extension),
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_could_not_update_write_date(self, details):
-        log.error(
-            'Something went wrong. Could not update EWCC write date. '\
-            'Details: {}'.format(details),
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                'Could not update EWCC write date. '\
+                'Details: {}'.format(details),
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_invalid_target_for_action_new(self, target):
-        log.error('Invalid target for action new {}.'.format(target))
-        return False
+        core_response = {
+            'failed': True,
+            'error': 'Invalid target for action new {}.'.format(target),
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_invalid_handler_value_set(self, *args, **kwargs):
-        log.error(
-            'Invalid handler value set. Details: {}, {}'.format(args, kwargs)
-        )
-        return False
+        core_response = {
+            'failed': True,
+            'error': 'Invalid handler value set. Details: {}, {}'
+                .format(args, kwargs),
+        }
+        log.error(core_response['error'])
+        return core_response

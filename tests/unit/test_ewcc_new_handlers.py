@@ -81,7 +81,10 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
     def test_ewcc_new_handlers_unit(self):
         print('[ * ]: EWallet Client Core New Handlers')
         new_handlers = self.core.new(new='handlers')
-        print(str(new_handlers) + '\n')
+        print(
+            "[ I ]: core.new(new='handlers') \n"
+            + "[ O ]: " + str(new_handlers) + '\n'
+        )
         return new_handlers
 
     def test_ewcc_new_specific_action_handlers_unit(self):
@@ -91,7 +94,11 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
             'handlers': ['action'],
             'actions': self.available_actions
         })
-        print(str(new_handlers) + '\n')
+        print(
+            "[ I ]: core.new(new='handlers', handlers=['action'], "
+            "actions=<action-label-set>) \n"
+            + "[ O ]: " + str(new_handlers) + '\n'
+        )
         self.assertTrue(isinstance(new_handlers, dict))
         self.assertTrue(isinstance(new_handlers.get('actions'), dict))
         self.assertTrue(isinstance(new_handlers.get('events'), dict))
@@ -106,7 +113,10 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
             'handlers': ['event'],
             'events': self.available_events
         })
-        print(str(new_handlers) + '\n')
+        print(
+            "[ I ]: core.new(new='handlers', handlers=['event'], events=<event-label-set>) \n"
+            + "[ O ]: " + str(new_handlers) + '\n'
+        )
         self.assertTrue(isinstance(new_handlers, dict))
         self.assertTrue(isinstance(new_handlers.get('actions'), dict))
         self.assertTrue(isinstance(new_handlers.get('events'), dict))
@@ -122,7 +132,11 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
             'actions': self.available_actions,
             'events': self.available_events
         })
-        print(str(new_handlers) + '\n')
+        print(
+            "[ I ]: core.new(new='handlers', handlers=['action', 'event'], "
+            "actions=<action-label-set>, events=<event-label-set>) \n"
+            + "[ O ]: " + str(new_handlers) + '\n'
+        )
         self.assertTrue(isinstance(new_handlers, dict))
         self.assertTrue(isinstance(new_handlers.get('actions'), dict))
         self.assertTrue(isinstance(new_handlers.get('events'), dict))

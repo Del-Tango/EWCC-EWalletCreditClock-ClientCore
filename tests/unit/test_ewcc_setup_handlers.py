@@ -81,7 +81,10 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
     def test_ewcc_setup_all_handlers_unit(self):
         print('[ * ]: EWallet Client Core Setup All Handlers')
         setup_handlers = self.core.setup_handlers()
-        print(str(setup_handlers) + '\n')
+        print(
+            "[ I ]: core.setup_handlers() \n"
+            + "[ O ]: " + str(setup_handlers) + '\n'
+        )
         return setup_handlers
 
     def test_ewcc_setup_specific_action_handlers_unit(self):
@@ -90,7 +93,10 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
             'handlers': ['action'],
             'actions': self.available_actions
         })
-        print(str(setup_handlers) + '\n')
+        print(
+            "[ I ]: core.setup_handlers(handlers=['action'], actions=<action-label-set>) \n"
+            + "[ O ]: " + str(setup_handlers) + '\n'
+        )
         self.assertTrue(isinstance(setup_handlers, dict))
         self.assertTrue(isinstance(setup_handlers.get('actions'), dict))
         self.assertTrue(isinstance(setup_handlers.get('events'), dict))
@@ -104,7 +110,9 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
             'handlers': ['event'],
             'events': self.available_events
         })
-        print(str(setup_handlers) + '\n')
+        print(
+            "[ I ]: core.setup_handlers(handlers=['event'], events=<event-label-set>) \n"
+            + "[ O ]: " + str(setup_handlers) + '\n')
         self.assertTrue(isinstance(setup_handlers, dict))
         self.assertTrue(isinstance(setup_handlers.get('actions'), dict))
         self.assertTrue(isinstance(setup_handlers.get('events'), dict))
@@ -119,7 +127,10 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
             'actions': self.available_actions,
             'events': self.available_events
         })
-        print(str(setup_handlers) + '\n')
+        print(
+            "[ I ]: core.setup_handlers(handlers=['action', 'event'], "
+            "actions=<action-label-set>, events=<event-label-set>) \n"
+            + "[ O ]: " + str(setup_handlers) + '\n')
         self.assertTrue(isinstance(setup_handlers, dict))
         self.assertTrue(isinstance(setup_handlers.get('actions'), dict))
         self.assertTrue(isinstance(setup_handlers.get('events'), dict))
