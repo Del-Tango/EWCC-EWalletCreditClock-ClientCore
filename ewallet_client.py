@@ -40,6 +40,8 @@ class EWalletClientCore():
         self.timestamp = None
         self.config_file = kwargs.get('config_file') or 'conf/ewcc.conf'
         self.config = Config(config_file=self.config_file)
+        self.execution_category = str()
+        self.previous = str()
         self.previous_action = str()
         self.previous_event = str()
 
@@ -65,6 +67,8 @@ class EWalletClientCore():
             'timestamp': self.timestamp,
             'config_file': self.config_file,
             'config': self.config.fetch_settings(),
+            'execute': self.execution_category,
+            'previous': self.previous,
             'previous_action': self.previous_action,
             'previous_event': self.previous_event,
         }
@@ -143,6 +147,26 @@ class EWalletClientCore():
 
     # UPDATERS
 
+    def update_core_state_from_resource(self, target_label, resource_map):
+        log.debug('')
+        resource_state = resource_map[target_label].state()
+        resource_type = self.check_resource_type(target_label)
+        if resource_type == 'action':
+            resource_state.update({
+                'execution_category': 'action',
+                'previous': target_label,
+                'previous_action': target_label,
+            })
+        elif resource_type == 'event':
+            resource_state.update({
+                'execution_category': 'event',
+                'previous': target_label,
+                'previous_event': target_label,
+            })
+        else:
+            return self.error_invalid_resource_label(target_label)
+        return self.set_client_core_values(resource_state)
+
     def update_write_date(self, **kwargs):
         log.debug('')
         try:
@@ -168,6 +192,19 @@ class EWalletClientCore():
             return self.error_could_not_update_action_handler_set(extension)
         return True
 
+    # CHECKERS
+
+    def check_resource_type(self, target_label):
+        log.debug('')
+        actions = self.fetch_action_label_map()
+        events = self.fetch_event_label_map()
+        if target_label in actions.keys():
+            return 'action'
+        elif target_label in events.keys():
+            return 'event'
+        self.error_invalid_resource_label(target_label)
+        return False
+
     # COMPUTERS
 
     def compute_setup_event_handler(self, handler_map):
@@ -182,16 +219,43 @@ class EWalletClientCore():
 
     # CORE
 
-    def response(self, *args, **kwargs):
-        log.debug('TODO')
+    def response_core(self):
+        log.debug('')
+        return {
+            'failed': False,
+            'response': {
+                'execute': self.execution_category,
+                'response': self.response,
+                'action': self.previous_action,
+                'event': self.previous_event,
+                'instruction_set_response': self.instruction_set_response,
+            }
+        }
 
+#   @pysnooper.snoop()
+    def last_response(self, *args, **kwargs):
+        log.debug('')
+        if not args and not kwargs:
+            return self.response_core()
+        if not args:
+            if kwargs.get('raw'):
+                return self.response
+            elif kwargs.get('raw') and kwargs['raw'] is False:
+                return self.instruction_set_response
+        resource_map = self.fetch_complete_resource_map()
+        if args[0] not in list(resource_map.keys()):
+            return self.error_invalid_resource_label(args[0])
+        return resource_map[args[0]](**kwargs)
 
+#   @pysnooper.snoop()
     def execute(self, target_label):
         log.debug('')
         resource_map = self.fetch_complete_resource_map()
         if target_label not in resource_map:
             return self.error_invalid_target_label(target_label)
-        return resource_map[target_label].execute()
+        execute = resource_map[target_label].execute()
+        self.update_core_state_from_resource(target_label, resource_map)
+        return execute
 
     # TODO
     def new_issue_report(self, *args, **kwargs):
@@ -402,6 +466,14 @@ class EWalletClientCore():
         return core_response
 
     # ERRORS
+
+    def error_invalid_resource_label(self, resource_label):
+        core_response = {
+            'failed': True,
+            'error': 'Invalid resource label {}.'.format(resource_label),
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_invalid_target_label(self, target_label):
         core_response = {

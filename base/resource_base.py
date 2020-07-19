@@ -26,6 +26,19 @@ class ResourceBase():
 
     # FETCHERS
 
+    def fetch_resource_values(self):
+        log.debug('')
+        return {
+            'create_date': self.create_date,
+            'write_date': self.write_date,
+            'instruction_set': self.instruction_set,
+            'instruction_set_response': self.instruction_set_response,
+            'response': self.response,
+            'timestamp': self.timestamp,
+            'status': self.status,
+            'previous': self.previous,
+        }
+
     def fetch_instruction_set(self):
         log.debug('')
         instruction_set = self.instruction_set
@@ -116,11 +129,21 @@ class ResourceBase():
     def update_last_ewsc_response_status(self, instruction_set_response):
         log.debug('')
         try:
-            self.status = instruction_set_response.get('failed')
+            self.status = False if instruction_set_response.get('failed') \
+                else True
         except:
             self.error_could_not_update_last_ewsc_response_status(
                 instruction_set_response
             )
+            return False
+        return True
+
+    def update_last_instruction_set_execution_timestamp(self):
+        log.debug('')
+        try:
+            self.timestamp = datetime.datetime.now()
+        except:
+            self.error_could_not_update_last_instruction_set_execution_timestamp()
             return False
         return True
 
@@ -131,6 +154,7 @@ class ResourceBase():
             'instruction_set': self.update_last_executed_instruction_set(instruction_set),
             'instruction_set_response': self.update_last_ewsc_instruction_set_response(response),
             'status': self.update_last_ewsc_response_status(self.instruction_set_response),
+            'timestamp': self.update_last_instruction_set_execution_timestamp(),
             'write_date': self.update_last_write_date()
         }
         return self.warning_could_not_update_last_ewsc_resource_response(response) \
@@ -186,6 +210,16 @@ class ResourceBase():
 
     # CORE
 
+    def response(self, raw=False):
+        log.debug('')
+        return self.instruction_set_response if not raw else self.response
+
+    def state(self, **kwargs):
+        log.debug('')
+        state = kwargs.get('state') or {}
+        state.update(self.fetch_resource_values())
+        return state
+
     def execute(self, instruction_set):
         log.debug('')
         target_url = self.fetch_action_instruction_set_target_url()
@@ -205,9 +239,6 @@ class ResourceBase():
         return fields_set
 
     def purge(self):
-        log.debug('TODO')
-
-    def response(self):
         log.debug('TODO')
 
     # WARNINGS
@@ -232,6 +263,15 @@ class ResourceBase():
         return core_response
 
     # ERRORS
+
+    def error_could_not_update_last_instruction_set_execution_timestamp(self):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not update last instruction set execution timestamp.',
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_instruction_set_parameter_not_properly_set(self, *args):
         core_response = {
