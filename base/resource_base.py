@@ -210,6 +210,38 @@ class ResourceBase():
 
     # CORE
 
+    def set_instructions(self, value_set, *args, **kwargs):
+        log.debug('')
+        instructions = []
+        for field in value_set:
+            try:
+                self.instruction_set.update({field: value_set[field]})
+                instructions.append(field)
+            except:
+                self.warning_could_not_set_instruction(field)
+        return {
+            'failed': False if instructions else True,
+            'updated': instructions,
+            'instruction_set': self.instruction_set,
+        }
+
+    def set_values(self, value_set, *args, **kwargs):
+        log.debug('')
+        if not kwargs.get('resource'):
+            return self.set_instructions(value_set, *args, **kwargs)
+        fields_set = []
+        for field in value_set:
+            try:
+                setattr(self, field, value_set[field])
+                fields_set.append(field)
+            except:
+                self.warning_could_not_set_resource_attribute(field)
+        return {
+            'failed': False if fields_set else True,
+            'updated': fields_set,
+            'state': self.state(),
+        }
+
     def last_response(self, raw=False):
         log.debug('')
         return self.instruction_set_response if not raw else self.response
@@ -227,21 +259,20 @@ class ResourceBase():
         api_call = self.issue_api_call('POST', target_url, formatted_data)
         return self.process_api_call(instruction_set, api_call)
 
-    def set_values(self, value_set, *args, **kwargs):
-        log.debug('')
-        fields_set = []
-        for field in value_set:
-            try:
-                setattr(self, field, value_set[field])
-                fields_set.append(field)
-            except:
-                self.warning_could_not_set_resource_attribute(field)
-        return fields_set
-
     def purge(self):
         log.debug('TODO')
 
     # WARNINGS
+
+    def warning_could_not_set_instruction(self, instruction_tag):
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. '
+                       'Could not set resource handler instruction set tag {}.'\
+                       .format(instruction_tag),
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     def warning_unpopulated_instruction_set(self, *args):
         core_response = {

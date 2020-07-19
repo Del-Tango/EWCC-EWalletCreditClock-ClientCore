@@ -219,6 +219,31 @@ class EWalletClientCore():
 
     # CORE
 
+#   @pysnooper.snoop()
+    def set_values(self, target_label, **value_set):
+        log.debug('')
+        if not target_label or isinstance(target_label, str) and \
+                target_label == 'Core':
+            return self.set_client_core_values(value_set)
+        if target_label == 'Config':
+            return self.set_client_core_config_values(value_set)
+        resource_map = self.fetch_complete_resource_map()
+        if target_label not in resource_map:
+            return self.error_invalid_target_label(target_label)
+        return resource_map[target_label].set_values(value_set)
+
+    def state(self, *args, **kwargs):
+        log.debug('')
+        if not args or args[0] in ['Core', '']:
+            return {
+                'failed': False,
+                'state': self.fetch_ewallet_client_core_values(),
+            }
+        resource_map = self.fetch_complete_resource_map()
+        if args[0] not in resource_map:
+            return self.error_invalid_resource_label(args[0])
+        return resource_map[args[0]].state()
+
     def response_core(self):
         log.debug('')
         return {
@@ -284,18 +309,6 @@ class EWalletClientCore():
                 'state': self.fetch_ewallet_client_core_values(),
             }
 
-    def set_values(self, target_label, value_set):
-        log.debug('')
-        if not target_label or isinstance(target_label, str) and \
-                target_label == 'Core':
-            return self.set_client_core_values(value_set)
-        if target_label == 'Config':
-            return self.set_client_core_config_values(value_set)
-        resource_map = self.fetch_complete_resource_map()
-        if target_label not in resource_map:
-            return self.error_invalid_target_label(target_label)
-        return resource_map[target_label].set(value_set)
-
     def new_handlers(self, *args, **kwargs):
         log.debug('')
         return self.setup_handlers(*args, **kwargs)
@@ -333,13 +346,6 @@ class EWalletClientCore():
         return {
             'failed': False,
             'events': event_handlers,
-        }
-
-    def state(self, *args, **kwargs):
-        log.debug('')
-        return {
-            'failed': False,
-            'state': self.fetch_ewallet_client_core_values(),
         }
 
 #   @pysnooper.snoop('logs/ewcc.log')

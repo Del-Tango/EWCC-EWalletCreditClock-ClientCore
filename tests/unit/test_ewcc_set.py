@@ -11,6 +11,7 @@ class TestEwalletClientCoreSet(unittest.TestCase):
     def setUpClass(cls):
         # Instantiate CC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
+        cls.core.setup_handlers()
 
     @classmethod
     def tearDownClass(cls):
@@ -18,9 +19,9 @@ class TestEwalletClientCoreSet(unittest.TestCase):
 
     def test_ewcc_set_core_values_implicitly_unit(self):
         print('[ * ]: EWallet Client Core Set Core Values Implicitly')
-        set_core = self.core.set_values('', {'config_file': 'test/edited.conf'})
+        set_core = self.core.set_values('', **{'config_file': 'test/edited.conf'})
         print(
-            "[ I ]: core.set_values('', {'config_file': 'test/edited.conf'}) \n"
+            "[ I ]: core.set_values('', **{'config_file': 'test/edited.conf'}) \n"
             + "[ O ]: " + str(set_core) + '\n'
         )
         self.assertTrue(isinstance(set_core, dict))
@@ -32,9 +33,9 @@ class TestEwalletClientCoreSet(unittest.TestCase):
 
     def test_ewcc_set_core_values_explicitly_unit(self):
         print('[ * ]: EWallet Client Core Set Core Values Explicity')
-        set_core = self.core.set_values('Core', {'config_file': 'test2/edited.conf'})
+        set_core = self.core.set_values('Core', **{'config_file': 'test2/edited.conf'})
         print(
-            "[ I ]: core.set_values('Core', {'config_file': 'test2/edited.conf'}) \n"
+            "[ I ]: core.set_values('Core', **{'config_file': 'test2/edited.conf'}) \n"
             + "[ O ]: " + str(set_core) + '\n'
         )
         self.assertTrue(isinstance(set_core, dict))
@@ -46,9 +47,9 @@ class TestEwalletClientCoreSet(unittest.TestCase):
 
     def test_ewcc_set_core_config_values_unit(self):
         print('[ * ]: EWallet Client Core Set Core Config Values')
-        set_config = self.core.set_values('Config', {'config_file': 'test3/edited.conf'})
+        set_config = self.core.set_values('Config', **{'config_file': 'test3/edited.conf'})
         print(
-            "[ I ]: core.set_values('Config', {'config_file': 'test3/edited.conf'}) \n"
+            "[ I ]: core.set_values('Config', **{'config_file': 'test3/edited.conf'}) \n"
             + "[ O ]: " + str(set_config) + '\n'
         )
         self.assertTrue(isinstance(set_config, dict))
@@ -57,3 +58,31 @@ class TestEwalletClientCoreSet(unittest.TestCase):
         self.assertTrue(isinstance(set_config.get('updated'), list))
         self.assertTrue(isinstance(set_config.get('config'), dict))
         return set_config
+
+    def test_ewcc_set_resource_instruction_unit(self):
+        print('[ * ]: EWallet Client Core Set Resource Instruction -')
+        request = self.core.execute('RequestClientID')
+        set_instruction = self.core.set_values(
+            'RequestSessionToken', **{'client_id': request['client_id']}
+        )
+        print(
+            "[ I ]: core.set_values('RequestSessionToken', **{'client_id': request['client_id']}) \n"
+            + "[ O ]: " + str(set_instruction) + '\n'
+        )
+        self.assertTrue(isinstance(set_instruction, dict))
+        self.assertFalse(set_instruction.get('failed'))
+        self.assertTrue(isinstance(set_instruction.get('updated'), list))
+        self.assertTrue(isinstance(set_instruction['updated'][0], str))
+        self.assertEqual(set_instruction['updated'][0], 'client_id')
+        self.assertTrue(isinstance(set_instruction.get('instruction_set'), dict))
+        self.assertTrue(set_instruction['instruction_set'].get('client_id'))
+        self.assertTrue(isinstance(set_instruction['instruction_set']['client_id'], str))
+        return set_instruction
+
+
+
+
+
+
+
+
