@@ -22,7 +22,27 @@ class RequestClientID(ActionBase):
 
     # FETCHERS
 
+    def fetch_resource_purge_map(self):
+        log.debug('')
+        value_set = {
+            'instruction_set': {
+                'controller': 'client',
+                'ctype': 'action',
+                'action': 'request',
+                'request': 'client_id',
+            },
+        }
+        return value_set
+
     # CORE
+
+    def purge(self, *args, **kwargs):
+        log.debug('')
+        purge_map = self.fetch_resource_purge_map()
+        purge_fields = kwargs.get('purge') or purge_map.keys()
+        return super(RequestClientID, self).purge(
+            *args, purge=purge_fields, purge_map=purge_map
+        )
 
     def execute(self, **kwargs):
         log.debug('')

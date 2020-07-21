@@ -2,6 +2,7 @@ import datetime
 import logging
 import requests
 import json
+import pysnooper
 
 from base64 import b64encode
 
@@ -25,6 +26,17 @@ class ResourceBase():
         self.previous = str()
 
     # FETCHERS
+
+    def fetch_resource_purge_map(self):
+        log.debug('')
+        return {
+            'write_date': datetime.datetime.now(),
+            'instruction_set_response': dict(),
+            'response': None,
+            'timestamp': None,
+            'status': bool(),
+            'previous': str(),
+        }
 
     def fetch_resource_values(self):
         log.debug('')
@@ -210,6 +222,20 @@ class ResourceBase():
 
     # CORE
 
+#   @pysnooper.snoop('logs/ewcc.log')
+    def purge(self, *args, **kwargs):
+        log.debug('')
+        purge_map = self.fetch_resource_purge_map()
+        if kwargs.get('purge_map'):
+            purge_map.update(kwargs['purge_map'])
+        purge_fields = kwargs.get('purge') or purge_map.keys()
+        value_set = {} if not args or not isinstance(args[0], list) else args[0]
+        for item in purge_fields:
+            if item not in value_set:
+                value_set.update({item: purge_map[item]})
+        return self.set_values(value_set, resource=True)
+
+#   @pysnooper.snoop('logs/ewcc.log')
     def set_instructions(self, value_set, *args, **kwargs):
         log.debug('')
         instructions = []
@@ -225,6 +251,7 @@ class ResourceBase():
             'instruction_set': self.instruction_set,
         }
 
+#   @pysnooper.snoop('logs/ewcc.log')
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
         if not kwargs.get('resource'):
@@ -258,9 +285,6 @@ class ResourceBase():
         formatted_data = self.format_data_set_for_api_call(instruction_set)
         api_call = self.issue_api_call('POST', target_url, formatted_data)
         return self.process_api_call(instruction_set, api_call)
-
-    def purge(self):
-        log.debug('TODO')
 
     # WARNINGS
 

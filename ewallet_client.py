@@ -47,6 +47,32 @@ class EWalletClientCore():
 
     # FETCHERS
 
+    def fetch_action_resource_handler_map(self):
+        log.debug('')
+        return self.actions
+
+    def fetch_event_resource_handler_map(self):
+        log.debug('')
+        return self.events
+
+    def fetch_ewallet_client_core_purge_map(self):
+        log.debug('')
+        return {
+            'write_date': datetime.datetime.now(),
+            'config_file': str(),
+            'actions': dict(),
+            'events': dict(),
+            'status': bool(),
+            'instruction_set': dict(),
+            'instruction_set_response': dict(),
+            'response': None,
+            'timestamp': None,
+            'execute': str(),
+            'previous': str(),
+            'previous_action': str(),
+            'previous_event': str(),
+        }
+
     def fetch_complete_resource_map(self):
         log.debug('')
         resource_map = self.actions.copy()
@@ -219,6 +245,100 @@ class EWalletClientCore():
 
     # CORE
 
+    # TODO
+    def new_issue_report(self, *args, **kwargs):
+        log.debug('TODO - Not yet implemented.')
+    def previous(self, *args, **kwargs):
+        log.debug('TODO')
+
+#   @pysnooper.snoop('logs/ewcc.log')
+    def action_resource_purge(self, *args, **kwargs):
+        log.debug('')
+        resource_map = self.fetch_action_resource_handler_map()
+        try:
+            purge_map = {
+                item: resource_map[item].purge(*args, **kwargs)
+                for item in resource_map
+            }
+        except:
+            return self.error_could_not_purge_all_action_resource_handlers(args, kwargs)
+        purge_map.update({'failed': False})
+        return purge_map
+
+    def event_resource_purge(self, *args, **kwargs):
+        log.debug('')
+        resource_map = self.fetch_event_resource_handler_map()
+        try:
+            purge_map = {
+                item: resource_map[item].purge(*args, **kwargs)
+                for item in resource_map
+            }
+        except:
+            return self.error_could_not_purge_all_action_resource_handlers(args, kwargs)
+        purge_map.update({'failed': False})
+        return purge_map
+
+#   @pysnooper.snoop('logs/ewcc.log')
+    def total_resource_purge(self, *args, **kwargs):
+        log.debug('')
+        resource_map = self.fetch_complete_resource_map()
+        try:
+            purge_map = {
+                item: resource_map[item].purge(*args, **kwargs)
+                for item in resource_map
+            }
+        except:
+            return self.error_could_not_purge_all_resources(resource_map)
+        purge_map.update({'failed': False})
+        return purge_map
+
+#   @pysnooper.snoop('logs/ewcc.log')
+    def resource_purge(self, *args, **kwargs):
+        log.debug('')
+        if kwargs.get('actions'):
+            return self.action_resource_purge(*args, **kwargs)
+        elif kwargs.get('events'):
+            return self.event_resource_purge(*args, **kwargs)
+        return self.total_resource_purge(*args, **kwargs)
+
+    def config_purge(self, *args, **kwargs):
+        log.debug('')
+        return self.config.purge(*args, **kwargs)
+
+    def core_purge(self, *args, **kwargs):
+        log.debug('')
+        purge_map = self.fetch_ewallet_client_core_purge_map()
+        purge_fields = kwargs.get('purge') or purge_map.keys()
+        value_set = {item: purge_map[item] for item in purge_fields}
+        return self.set_values('Core', **value_set)
+
+    def total_purge(self):
+        log.debug('')
+        try:
+            purge = {
+                'core': self.core_purge(),
+                'resource': self.resource_purge(),
+            }
+        except:
+            return self.error_could_not_purge_core_and_resources()
+        purge.update({'failed': False})
+        return purge
+
+    def purge(self, *args, **kwargs):
+        log.debug('')
+        if not args and not kwargs:
+            return self.total_purge()
+        elif args and args[0] in ['Core', '']:
+            return self.core_purge(*args, **kwargs)
+        elif args and args[0] == 'Config':
+            return self.config_purge(*args, **kwargs)
+        elif args and args[0] == 'Resource':
+            return self.resource_purge(*args, **kwargs)
+        resource_map = self.fetch_complete_resource_map()
+        if args and args[0] not in resource_map:
+            return self.error_invalid_target_label(args[0])
+        return resource_map[target_label].purge(*args, **kwargs)
+
 #   @pysnooper.snoop()
     def set_values(self, target_label, **value_set):
         log.debug('')
@@ -281,17 +401,9 @@ class EWalletClientCore():
         self.update_core_state_from_resource(target_label, resource_map)
         return execute
 
-    # TODO
-    def new_issue_report(self, *args, **kwargs):
-        log.debug('TODO - Not yet implemented.')
-    def previous(self, *args, **kwargs):
-        log.debug('TODO')
-    def purge(self, *args, **kwargs):
-        log.debug('TODO')
-
     def set_client_core_config_values(self, value_set):
         log.debug('')
-        return self.config.set(value_set)
+        return self.config.set_values(value_set)
 
     def set_client_core_values(self, value_set):
         log.debug('')
@@ -471,6 +583,45 @@ class EWalletClientCore():
         return core_response
 
     # ERRORS
+
+    def error_could_not_purge_all_action_resource_handlers(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not purge all action resource handlers. '
+                     'Details: {}'.format(args),
+        }
+        log.error(core_response['error'])
+        return core_response
+
+    def error_could_not_selectively_purge_all_resource_handlers(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not selectively purge all resource handlers. '
+                     'Details: {}'.format(args),
+        }
+        log.error(core_response['error'])
+        return core_response
+
+    def error_could_not_purge_all_resources(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not purge all core resources. Details: {}'\
+                     .format(args),
+        }
+        log.error(core_response['error'])
+        return core_response
+
+    def error_could_not_purge_core_and_resources(self):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not purge core and resources.',
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_invalid_resource_label(self, resource_label):
         core_response = {
