@@ -20,7 +20,8 @@ class TestEwalletClientResponse(unittest.TestCase):
         pass
 
     def test_ewcc_response_core_unit(self):
-        print('[ * ]: EWallet Client Core Last Response Details -')
+        print('[ * ]: EWCC Subroutine LastResponse Action-')
+        self.core.execute('RequestClientID')
         response = self.core.last_response()
         print(
             "[ I ]: core.last_response() \n"
@@ -28,17 +29,15 @@ class TestEwalletClientResponse(unittest.TestCase):
         )
         self.assertTrue(isinstance(response, dict))
         self.assertFalse(response.get('failed'))
-        self.assertEqual(len(response.keys()), 2)
-        self.assertTrue(isinstance(response.get('response'), dict))
-        self.assertEqual(len(response['response'].keys()), 5)
-        self.assertTrue(isinstance(response['response'].get('execute'), str))
-        self.assertTrue(isinstance(response['response'].get('action'), str))
-        self.assertTrue(isinstance(response['response'].get('event'), str))
-        self.assertTrue(isinstance(response['response'].get('instruction_set_response'), dict))
+        self.assertEqual(len(response.keys()), 5)
+        self.assertTrue(isinstance(response.get('execute'), str))
+        self.assertTrue(isinstance(response.get('action'), str))
+#       self.assertTrue(isinstance(response.get('event'), str))
+        self.assertTrue(isinstance(response.get('instruction_set_response'), dict))
         return response
 
     def test_ewcc_response_core_raw_unit(self):
-        print('[ * ]: EWallet Client Core Raw Last Response -')
+        print('[ * ]: EWCC Subroutine RawLastResponse -')
         response = self.core.last_response(raw=True)
         print(
             "[ I ]: core.last_response(raw=True) \n"
@@ -48,7 +47,7 @@ class TestEwalletClientResponse(unittest.TestCase):
         return response
 
     def test_ewcc_response_core_execution_unit(self):
-        print('[ * ]: EWallet Client Core Execution Last Response -')
+        print('[ * ]: EWCC Subroutine ExecutionLastResponse -')
         response = self.core.last_response(raw=False)
         print(
             "[ I ]: core.last_response(raw=False) \n"
@@ -60,7 +59,7 @@ class TestEwalletClientResponse(unittest.TestCase):
         return response
 
     def test_ewcc_response_action_request_client_id_unit(self):
-        print('[ * ]: EWallet Client Core Action Last Response -')
+        print('[ * ]: EWCC Subroutine SpecificActionLastResponse -')
         response = self.core.last_response('RequestClientID')
         print(
             "[ I ]: core.last_response('RequestClientID') \n"
@@ -72,7 +71,7 @@ class TestEwalletClientResponse(unittest.TestCase):
         return response
 
     def test_ewcc_response_specific_action_request_client_id_unit(self):
-        print('[ * ]: EWallet Client Core Specific Action Last Response -')
+        print('[ * ]: EWCC Subroutine SpecificActionLastResponse -')
         response = self.core.actions['RequestClientID'].last_response()
         print(
             "[ I ]: core.actions['RequestClientID'].last_response() \n"
@@ -85,7 +84,7 @@ class TestEwalletClientResponse(unittest.TestCase):
         return response
 
     def test_ewcc_response_specific_raw_action_request_client_id_unit(self):
-        print('[ * ]: EWallet Client Core Specific Action Last Response Raw -')
+        print('[ * ]: EWCC Subroutine SpecificActionRawLastResponse -')
         response = self.core.actions['RequestClientID'].last_response(raw=True)
         print(
             "[ I ]: core.actions['RequestClientID'].last_response(raw=True) \n"

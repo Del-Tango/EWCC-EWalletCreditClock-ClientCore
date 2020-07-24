@@ -21,7 +21,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         pass
 
     def test_ewcc_purge_all_values_unit(self):
-        print('[ * ]: EWallet Client Core Purge All Values')
+        print('[ * ]: EWCC Subroutine Purge -')
         purge_core = self.core.purge()
         print(
             "[ I ]: core.purge() \n"
@@ -32,11 +32,11 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         self.assertTrue(isinstance(purge_core['core'], dict))
         self.assertTrue(isinstance(purge_core['resource'], dict))
         self.assertFalse(purge_core['core'].get('failed'))
-        self.assertFalse(purge_core['resource'].get('failed'))
+        self.assertTrue(isinstance(purge_core['resource'].get('failed'), bool))
         return purge_core
 
     def test_ewcc_purge_core_values_implicitly_unit(self):
-        print('[ * ]: EWallet Client Core Purge Core Values Implicitly')
+        print('[ * ]: EWCC Subroutine PurgeCore Implicitly -')
         purge_core = self.core.purge('')
         print(
             "[ I ]: core.purge('') \n"
@@ -49,7 +49,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_specific_core_values_implicitly_unit(self):
-        print('[ * ]: EWallet Client Core Purge Specific Core Values Implicitly')
+        print('[ * ]: EWCC Subroutine PurgeSpecificCoreValues Implicitly -')
         purge_core = self.core.purge('', purge=['config_file'])
         print(
             "[ I ]: core.purge('', purge=['config_file']) \n"
@@ -63,7 +63,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_core_values_explicitly_unit(self):
-        print('[ * ]: EWallet Client Core Purge Core Values Explicitly')
+        print('[ * ]: EWCC Subroutine PurgeCore Explicitly -')
         purge_core = self.core.purge('Core')
         print(
             "[ I ]: core.purge('Core') \n"
@@ -76,7 +76,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_specific_core_values_explicitly_unit(self):
-        print('[ * ]: EWallet Client Core Purge Core Values Explicitly')
+        print('[ * ]: EWCC Subroutine PurgeSpecificCoreValues Explicitly -')
         purge_core = self.core.purge('Core', purge=['config_file'])
         print(
             "[ I ]: core.purge('Core', purge=['config_file']) \n"
@@ -90,7 +90,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_config_values_explicitly_unit(self):
-        print('[ * ]: EWallet Client Core Purge Config Values Explicitly')
+        print('[ * ]: EWCC Subroutine PurgeConfig -')
         purge_core = self.core.purge('Config')
         print(
             "[ I ]: core.purge('Config') \n"
@@ -103,7 +103,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_specific_config_values_explicitly_unit(self):
-        print('[ * ]: EWallet Client Core Purge Specific Config Values Explicitly')
+        print('[ * ]: EWCC Subroutine PurgeSpecificConfigValues -')
         purge_core = self.core.purge('Config', purge=['config_file'])
         print(
             "[ I ]: core.purge('Config', purge=['config_file']) \n"
@@ -117,7 +117,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_resource_values_unit(self):
-        print('[ * ]: EWallet Client Core Purge Resource')
+        print('[ * ]: EWCC Subroutine PurgeResourceHandlers -')
         self.core.setup_handlers()
         purge_core = self.core.purge('Resource')
         print(
@@ -129,7 +129,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_action_resource_handlers_value_set_unit(self):
-        print('[ * ]: EWallet Client Core Purge Action Resource Handlers Value Set')
+        print('[ * ]: EWCC Subroutine PurgeActionResourceHandlers -')
         self.core.setup_handlers()
         purge_core = self.core.purge('Resource', actions=True)
         print(
@@ -141,7 +141,7 @@ class TestEwalletClientCorePurge(unittest.TestCase):
         return purge_core
 
     def test_ewcc_purge_action_resource_handlers_specified_value_set_unit(self):
-        print('[ * ]: EWallet Client Core Purge Action Resource Handlers Specified Value Set')
+        print('[ * ]: EWCC Subroutine PurgeSpecificActionResourceHandlerValues')
         self.core.setup_handlers(handlers=['action'], actions=['RequestClientID'])
         purge_core = self.core.purge(
             'Resource', actions=True, purge=['instruction_set']

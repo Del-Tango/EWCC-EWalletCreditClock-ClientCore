@@ -79,7 +79,7 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
         pass
 
     def test_ewcc_setup_all_handlers_unit(self):
-        print('[ * ]: EWallet Client Core Setup All Handlers')
+        print('[ * ]: EWCC Subroutine SetupHandlers -')
         setup_handlers = self.core.setup_handlers()
         print(
             "[ I ]: core.setup_handlers() \n"
@@ -88,7 +88,7 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
         return setup_handlers
 
     def test_ewcc_setup_specific_action_handlers_unit(self):
-        print('[ * ]: EWallet Client Core Setup Specific Action Handlers')
+        print('[ * ]: EWCC Subroutine SetupSpecificActionHandlers -')
         setup_handlers = self.core.setup_handlers(**{
             'handlers': ['action'],
             'actions': self.available_actions
@@ -99,13 +99,12 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
         )
         self.assertTrue(isinstance(setup_handlers, dict))
         self.assertTrue(isinstance(setup_handlers.get('actions'), dict))
-        self.assertTrue(isinstance(setup_handlers.get('events'), dict))
-        self.assertEqual(len(setup_handlers['actions']), len(self.available_actions))
-        self.assertEqual(len(setup_handlers['events']), len(self.available_events))
+        self.assertEqual(len(setup_handlers['actions']), len(self.available_actions) + 1)
+        self.assertFalse(setup_handlers.get('events'))
         return setup_handlers
 
     def test_ewcc_setup_specific_event_handlers_unit(self):
-        print('[ * ]: EWallet Client Core Setup Specific Event Handlers')
+        print('[ * ]: EWCC Subroutine SetupSpecificEventHandlers -')
         setup_handlers = self.core.setup_handlers(**{
             'handlers': ['event'],
             'events': self.available_events
@@ -114,14 +113,14 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
             "[ I ]: core.setup_handlers(handlers=['event'], events=<event-label-set>) \n"
             + "[ O ]: " + str(setup_handlers) + '\n')
         self.assertTrue(isinstance(setup_handlers, dict))
-        self.assertTrue(isinstance(setup_handlers.get('actions'), dict))
         self.assertTrue(isinstance(setup_handlers.get('events'), dict))
-        self.assertEqual(len(setup_handlers['actions']), len(self.available_actions))
-        self.assertEqual(len(setup_handlers['events']), len(self.available_events))
+        self.assertTrue(setup_handlers['events'].get('failed'))
+#       self.assertEqual(len(setup_handlers['events']), len(self.available_events) + 1)
+        self.assertFalse(setup_handlers.get('actions'))
         return setup_handlers
 
     def test_ewcc_setup_specific_handlers_unit(self):
-        print('[ * ]: EWallet Client Core Setup Specific Handlers')
+        print('[ * ]: EWCC Subroutine SetupSpecificHandlers -')
         setup_handlers = self.core.setup_handlers(**{
             'handlers': ['action', 'event'],
             'actions': self.available_actions,
@@ -134,6 +133,7 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
         self.assertTrue(isinstance(setup_handlers, dict))
         self.assertTrue(isinstance(setup_handlers.get('actions'), dict))
         self.assertTrue(isinstance(setup_handlers.get('events'), dict))
-        self.assertEqual(len(setup_handlers['actions']), len(self.available_actions))
-        self.assertEqual(len(setup_handlers['events']), len(self.available_events))
+        self.assertEqual(len(setup_handlers['actions']), len(self.available_actions) + 1)
+        self.assertTrue(setup_handlers['events'].get('failed'))
+#       self.assertEqual(len(setup_handlers['events']), len(self.available_events) + 1)
         return setup_handlers

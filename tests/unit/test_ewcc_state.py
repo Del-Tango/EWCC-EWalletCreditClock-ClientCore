@@ -17,7 +17,7 @@ class TestEwalletClientCoreState(unittest.TestCase):
         pass
 
     def test_ewcc_state_unit(self):
-        print('[ * ]: EWallet Client Core State')
+        print('[ * ]: EWCC Subroutine State -')
         core_state = self.core.state()
         print(
             "[ I ]: core.state() \n"

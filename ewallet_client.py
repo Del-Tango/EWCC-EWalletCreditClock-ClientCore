@@ -329,6 +329,8 @@ class EWalletClientCore():
             }
         except:
             return self.error_could_not_purge_all_resources(resource_map)
+        if not purge_map:
+            return self.warning_no_resource_handlers_found_to_purge(args, kwargs)
         purge_map.update({'failed': False})
         return purge_map
 
@@ -406,16 +408,17 @@ class EWalletClientCore():
 
     def response_core(self):
         log.debug('')
-        return {
+        response = {
             'failed': False,
-            'response': {
-                'execute': self.execution_category,
-                'response': self.response,
-                'action': self.previous_action,
-                'event': self.previous_event,
-                'instruction_set_response': self.instruction_set_response,
-            }
+            'execute': self.execution_category,
+            'response': self.response,
+            'instruction_set_response': self.instruction_set_response,
         }
+        if self.execution_category == 'action':
+            response.update({'action': self.previous_action})
+        elif self.execution_category == 'event':
+            response.update({'event': self.previous_event})
+        return response
 
 #   @pysnooper.snoop()
     def last_response(self, *args, **kwargs):
@@ -492,15 +495,15 @@ class EWalletClientCore():
                 continue
             setup_count += 1
             log.info('Successfully set up event handler for {}.'.format(item))
-        event_handlers = self.events
+        event_handlers = self.events.copy()
         if setup_count != len(handler_set):
             self.warning_not_all_specified_event_handlers_setup(event_handlers)
-        return {
-            'failed': False,
-            'events': event_handlers,
-        }
+        elif not event_handlers:
+            return self.warning_no_event_handlers_set_up(events, kwargs)
+        event_handlers.update({'failed': False})
+        return event_handlers
 
-#   @pysnooper.snoop('logs/ewcc.log')
+#   @pysnooper.snoop()
     def setup_action_handlers(self, actions='all', *args, **kwargs):
         log.debug('')
         action_map = self.fetch_action_label_map()
@@ -518,13 +521,13 @@ class EWalletClientCore():
                 continue
             setup_count += 1
             log.info('Successfully set up action handler for {}.'.format(item))
-        action_handlers = self.actions
+        action_handlers = self.actions.copy()
         if setup_count != len(handler_set):
             self.warning_not_all_specified_action_handlers_setup(action_handlers)
-        return {
-            'failed': False,
-            'actions': action_handlers,
-        }
+        elif not action_handlers:
+            return self.warning_no_action_handlers_set_up(actions, args, kwargs)
+        action_handlers.update({'failed': False})
+        return action_handlers
 
     def setup_all_handlers(self, *args, **kwargs):
         log.debug('')
@@ -534,13 +537,13 @@ class EWalletClientCore():
             'events': self.setup_event_handlers(events='all'),
         }
 
-#   @pysnooper.snoop('logs/ewcc.log')
+#   @pysnooper.snoop()
     def setup_handlers(self, *args, **kwargs):
         log.debug('')
-        handlers = {
+        handlers, response = {
             'action': self.setup_action_handlers,
             'event': self.setup_event_handlers,
-        }
+        }, {}
         if not kwargs.get('handlers'):
             return self.setup_all_handlers(*args, **kwargs)
         elif not isinstance(kwargs.get('handlers'), list):
@@ -549,14 +552,40 @@ class EWalletClientCore():
             if item not in handlers:
                 self.warning_invalid_handler(item)
                 continue
-            handlers[item](*args, **kwargs)
-        return {
-            'failed': False,
-            'actions': self.actions,
-            'events': self.events,
-        }
+            handle = handlers[item](*args, **kwargs)
+            response.update({item + 's': handle})
+        core_response = {'failed': False}
+        core_response.update(response)
+        return core_response
 
     # WARNINGS
+
+    def warning_no_action_handlers_set_up(self, *args):
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. No Action handlers set up. '
+                       'Details: {}'.format(args),
+        }
+        log.warning(core_response['warning'])
+        return core_response
+
+    def warning_no_event_handlers_set_up(self, *args):
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. No event handlers set up. '
+                       'Details: {}'.format(args),
+        }
+        log.warning(core_response['warning'])
+        return core_response
+
+    def warning_no_resource_handlers_found_to_purge(self, *args):
+        core_response = {
+            'failed': True,
+            'warning': 'No resource handlers found to purge. '
+                       'Details: {}'.format(args)
+        }
+        log.warning(core_response['warning'])
+        return core_response
 
     def warning_could_not_set_client_core_attribute(self, attribute):
         core_response = {

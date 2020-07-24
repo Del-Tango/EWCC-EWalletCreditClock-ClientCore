@@ -19,7 +19,7 @@ class TestEwalletClientExecute(unittest.TestCase):
         pass
 
     def test_ewcc_set_core_execute_action_request_client_id_unit(self):
-        print('[ * ]: EWallet Client Core Execute Action RequestClientID')
+        print('[ * ]: EWCC Subroutine Execute ActionRequestClientID -')
         execute = self.core.execute('RequestClientID')
         print(
             "[ I ]: core.execute('RequestClientID') \n"

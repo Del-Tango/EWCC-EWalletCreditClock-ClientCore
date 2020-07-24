@@ -492,10 +492,10 @@
             'log_config': <log-settup-section type-dict>,
             'cloud_config': <cloud-settup-section type-dict>
         },
-        'execution_category': '',
-        'previous_label': '',
-        'previous_action': '',
-        'previous_event': ''
+        'execution_category': <exection-type type-str>,
+        'previous_label': <previous-execution-label type-str>,
+        'previous_action': <previous-action-label type-str>,
+        'previous_event': <previous-event-label type-str>
     }
 }
 [ O ][ NOK ]: {
@@ -505,9 +505,6 @@
 }
 
 
-# TODO
-
-# TODO - If no resource handlers found to purge, return warning
 [ * ]: EWCC Subroutine Purge
 [ I ]: core.purge()
 [ O ][ OK  ]: {
@@ -552,6 +549,7 @@
     },
     'resource': {
         'failed': False
+        '<resource-label type-str>': <resource-handler-value-set type-dict>
     }
 }
 [ O ][ NOK ]: {
@@ -560,7 +558,7 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Remove redundancy
+
 [ * ]: EWCC Subroutine NewSpecificActionHandlers
 [ I ]: core.new(
     new='handlers',
@@ -571,9 +569,7 @@
     'failed': False,
     'actions': {
         'failed': False,
-        'actions': {
-            '<label>': <handler>
-        },
+        '<action-label type-str>': <action-handler type-handler-object>
     }
 }
 [ O ][ NOK ]: {
@@ -582,7 +578,7 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Remove redundancy
+
 [ * ]: EWCC Subroutine NewSpecificEventHandlers
 [ I ]: core.new(
     new='handlers',
@@ -593,9 +589,7 @@
     'failed': False,
     'events': {
         'failed': False,
-        'events': {
-            '<label>': <handler>
-        }
+        '<label>': <handler>
     }
 }
 [ O ][ NOK ]: {
@@ -604,7 +598,7 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Remove redundancy
+
 [ * ]: EWCC Subroutine NewSpecificHandlers
 [ I ]: core.new(
     new='handlers',
@@ -616,14 +610,11 @@
     'failed': False,
     'actions': {
         'failed': False,
-        'actions': {
-            '<label>': <handler>
-        },
+        '<label>': <handler>
+    },
     'events': {
         'failed': False,
-        'events': {
-            '<label>': <handler>
-        }
+        '<label>': <handler>
     }
 }
 [ O ][ NOK ]: {
@@ -632,18 +623,16 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Move response values to primary set
+
 [ * ]: EWCC Subroutine LastResponse -
 [ I ]: core.last_response()
 [ O ][ OK  ]: {
     'failed': False,
-    'response': {
-        'execute': '<execution-handler-type type-str>',
-        'response': <response type-http-request-object>,
-        'action': '<action-handler-label type-str>',
-        'event': '<event-handler-label type-str>',
-        'instruction_set_response': <instruction-set-response type-dict>
-    }
+    'execute': '<execution-handler-type type-str>',
+    'response': <response type-http-request-object>,
+    'action': '<action-handler-label type-str>',
+    'event': '<event-handler-label type-str>',
+    'instruction_set_response': <instruction-set-response type-dict>
 }
 [ O ][ NOK ]: {
     'failed': True,
@@ -651,21 +640,17 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Remove redundancy
+
 [ * ]: EWCC Subroutine SetupHandlers -
 [ I ]: core.setup_handlers()
 [ O ][ OK  ]: {
     'failed': False,
     'actions': {
         'failed': False,
-        'actions': {
-            '<action-label type-str>': <action-handler type-handler-object>
-        },
+        '<action-label type-str>': <action-handler type-handler-object>
     'events': {
         'failed': False,
-        'events': {
-            '<event-label type-str>': <event-handler type-handler-object>
-        }
+        '<event-label type-str>': <event-handler type-handler-object>
     }
 }
 [ O ][ NOK ]: {
@@ -674,7 +659,7 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Remove events tag to honour subroutine call
+
 [ * ]: EWCC Subroutine SetupSpecificActionHandlers
 [ I ]: core.setup_handlers(
     handlers=['action'],
@@ -685,7 +670,6 @@
     'actions': {
         '<action-label type-str>': <action-handler type-handler-object>
     },
-    'events': {}
 }
 [ O ][ NOK ]: {
     'failed': True,
@@ -693,7 +677,7 @@
     'warning': <warning-message type-str>
 }
 
-# TODO - Remove actions tag to honour subroutine call
+
 [ * ]: EWCC Subroutine SetupSpecificEventHandlers
 [ I ]: core.setup_handlers(
     handlers=['event'],
@@ -701,7 +685,6 @@
 )
 [ O ][ OK  ]: {
     'failed': False,
-    'actions': {},
     'events': {
         '<event-label type-str>': <event-handler type-handler-object>
     }

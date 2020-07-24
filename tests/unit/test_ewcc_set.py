@@ -18,7 +18,7 @@ class TestEwalletClientCoreSet(unittest.TestCase):
         pass
 
     def test_ewcc_set_core_values_implicitly_unit(self):
-        print('[ * ]: EWallet Client Core Set Core Values Implicitly')
+        print('[ * ]: EWCC Subroutine SetCoreValues Implicitly -')
         set_core = self.core.set_values('', **{'config_file': 'test/edited.conf'})
         print(
             "[ I ]: core.set_values('', **{'config_file': 'test/edited.conf'}) \n"
@@ -32,7 +32,7 @@ class TestEwalletClientCoreSet(unittest.TestCase):
         return set_core
 
     def test_ewcc_set_core_values_explicitly_unit(self):
-        print('[ * ]: EWallet Client Core Set Core Values Explicity')
+        print('[ * ]: EWCC Subroutine SetCoreValues Explicity -')
         set_core = self.core.set_values('Core', **{'config_file': 'test2/edited.conf'})
         print(
             "[ I ]: core.set_values('Core', **{'config_file': 'test2/edited.conf'}) \n"
@@ -46,7 +46,7 @@ class TestEwalletClientCoreSet(unittest.TestCase):
         return set_core
 
     def test_ewcc_set_core_config_values_unit(self):
-        print('[ * ]: EWallet Client Core Set Core Config Values')
+        print('[ * ]: EWCC Subroutine SetConfigValues -')
         set_config = self.core.set_values('Config', **{'config_file': 'test3/edited.conf'})
         print(
             "[ I ]: core.set_values('Config', **{'config_file': 'test3/edited.conf'}) \n"
@@ -60,7 +60,7 @@ class TestEwalletClientCoreSet(unittest.TestCase):
         return set_config
 
     def test_ewcc_set_resource_instruction_unit(self):
-        print('[ * ]: EWallet Client Core Set Resource Instruction -')
+        print('[ * ]: EWCC Subroutine SetResourceInstruction -')
         request = self.core.execute('RequestClientID')
         set_instruction = self.core.set_values(
             'RequestSessionToken', **{'client_id': request['client_id']}

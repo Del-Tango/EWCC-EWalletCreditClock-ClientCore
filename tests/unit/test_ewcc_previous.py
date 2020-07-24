@@ -21,7 +21,7 @@ class TestEwalletClientPrevious(unittest.TestCase):
 
 #   @pysnooper.snoop()
     def test_ewcc_previous_unit(self):
-        print('[ * ]: EWallet Client Core Previous')
+        print('[ * ]: EWCC Subroutine Previous -')
         self.core.execute('RequestClientID')
         previous = self.core.previous()
         print(
@@ -38,7 +38,7 @@ class TestEwalletClientPrevious(unittest.TestCase):
         return previous
 
     def test_ewcc_previous_action_unit(self):
-        print('[ * ]: EWallet Client Core Previous Action')
+        print('[ * ]: EWCC Subroutine PreviousAction -')
         self.core.execute('RequestClientID')
         previous = self.core.previous('action')
         print(
@@ -53,7 +53,7 @@ class TestEwalletClientPrevious(unittest.TestCase):
         return previous
 
     def test_ewcc_previous_event_unit(self):
-        print('[ * ]: EWallet Client Core Previous Event')
+        print('[ * ]: EWCC Subroutine PreviousEvent -')
         previous = self.core.previous('event')
         print(
             "[ I ]: core.previous('event') \n"
@@ -66,7 +66,7 @@ class TestEwalletClientPrevious(unittest.TestCase):
         return previous
 
     def test_ewcc_previous_specific_action_unit(self):
-        print('[ * ]: EWallet Client Core Previous Specific Action')
+        print('[ * ]: EWCC Subroutine PreviousSpecificAction -')
         self.core.execute('RequestClientID')
         previous = self.core.previous('RequestClientID')
         print(

@@ -79,7 +79,7 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
         pass
 
     def test_ewcc_new_handlers_unit(self):
-        print('[ * ]: EWallet Client Core New Handlers')
+        print('[ * ]: EWCC Subroutine NewHandlers -')
         new_handlers = self.core.new(new='handlers')
         print(
             "[ I ]: core.new(new='handlers') \n"
@@ -88,7 +88,7 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
         return new_handlers
 
     def test_ewcc_new_specific_action_handlers_unit(self):
-        print('[ * ]: EWallet Client Core New Specific Action Handlers')
+        print('[ * ]: EWCC Subroutine NewSpecificActionHandlers -')
         new_handlers = self.core.new(**{
             'new': 'handlers',
             'handlers': ['action'],
@@ -101,13 +101,11 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
         )
         self.assertTrue(isinstance(new_handlers, dict))
         self.assertTrue(isinstance(new_handlers.get('actions'), dict))
-        self.assertTrue(isinstance(new_handlers.get('events'), dict))
-        self.assertEqual(len(new_handlers['actions']), len(self.available_actions))
-        self.assertEqual(len(new_handlers['events']), len(self.available_events))
+        self.assertEqual(len(new_handlers['actions']), len(self.available_actions) + 1)
         return new_handlers
 
     def test_ewcc_new_specific_event_handlers_unit(self):
-        print('[ * ]: EWallet Client Core New Specific Event Handlers')
+        print('[ * ]: EWCC Subroutine NewSpecificEventHandlers -')
         new_handlers = self.core.new(**{
             'new': 'handlers',
             'handlers': ['event'],
@@ -118,14 +116,13 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
             + "[ O ]: " + str(new_handlers) + '\n'
         )
         self.assertTrue(isinstance(new_handlers, dict))
-        self.assertTrue(isinstance(new_handlers.get('actions'), dict))
         self.assertTrue(isinstance(new_handlers.get('events'), dict))
-        self.assertEqual(len(new_handlers['actions']), len(self.available_actions))
-        self.assertEqual(len(new_handlers['events']), len(self.available_events))
+        self.assertTrue(new_handlers['events'].get('failed'))
+#       self.assertEqual(len(new_handlers['events']), len(self.available_events) + 1)
         return new_handlers
 
     def test_ewcc_new_specific_handlers_unit(self):
-        print('[ * ]: EWallet Client Core New Specific Handlers')
+        print('[ * ]: EWCC Subroutine NewSpecificHandlers -')
         new_handlers = self.core.new(**{
             'new': 'handlers',
             'handlers': ['action', 'event'],
@@ -140,6 +137,7 @@ class TestEwalletClientCoreNewHandlers(unittest.TestCase):
         self.assertTrue(isinstance(new_handlers, dict))
         self.assertTrue(isinstance(new_handlers.get('actions'), dict))
         self.assertTrue(isinstance(new_handlers.get('events'), dict))
-        self.assertEqual(len(new_handlers['actions']), len(self.available_actions))
-        self.assertEqual(len(new_handlers['events']), len(self.available_events))
+        self.assertEqual(len(new_handlers['actions']), len(self.available_actions) + 1)
+#       self.assertEqual(len(new_handlers['events']), len(self.available_events) + 1)
+        self.assertTrue(new_handlers['events'].get('failed'))
         return new_handlers
