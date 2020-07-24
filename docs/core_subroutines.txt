@@ -3,6 +3,36 @@
 ###############################################################################
 
 
+[ * ]: EWCC Subroutine ConfigReload
+[ I ]: core.config_reload('<config-file type-str>')
+[ O ][ OK  ]: {
+    'failed': False,
+    'config': {
+        'config_timestamp': <config-reload-timestamp type-datetime-object>,
+        'config_file': <file-path type-str>,
+        'log_config': {
+            'log-name': <type-str>,
+            'log-level': <type-str>,
+            'log-dir': <directory-name type-str>,
+            'log-file': <file-name type-str>,
+            'log-path': <file-path type-str>,
+            'log-record-format': <log-record-format-template type-str>,
+            'log-date-format': <log-datetime-format-template type-str>,
+        },
+        'cloud_config': {
+            'ewsc-address': <ewsc-staging-server-address type-str>,
+            'ewsc-port': <ewsc-staging-server-port type-int>,
+            'ewsc-url': <ewsc-instruction-set-url type-str>
+        }
+    }
+}
+[ O ][ NOK ]: {
+    'failed': True,
+    'error': <error-message type-str>,
+    'warning': <warning-message type-str>
+}
+
+
 [ * ]: EWCC Subroutine ServerOnline
 [ I ]: core.server_online()
 [ O ][ OK  ]: {
