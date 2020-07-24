@@ -8,7 +8,7 @@ from base64 import b64encode
 
 from .config import Config
 
-config = Config()
+config = Config(config_file='conf/ewcc.conf')
 log = logging.getLogger(config.log_config['log-name'])
 
 
@@ -17,13 +17,13 @@ class ResourceBase():
     def __init__(self, *args, **kwargs):
         self.create_date = datetime.datetime.now()
         self.write_date = datetime.datetime.now()
-        self.config = kwargs.get('config') or config
+        self.config = config if not kwargs.get('config') else config
         self.instruction_set = dict()
         self.instruction_set_response = dict()
         self.response = None
         self.timestamp = None
         self.status = bool()
-        self.previous = str()
+        self.previous_label = str()
 
     # FETCHERS
 
@@ -35,7 +35,7 @@ class ResourceBase():
             'response': None,
             'timestamp': None,
             'status': bool(),
-            'previous': str(),
+            'previous_label': str(),
         }
 
     def fetch_resource_values(self):
@@ -48,7 +48,7 @@ class ResourceBase():
             'response': self.response,
             'timestamp': self.timestamp,
             'status': self.status,
-            'previous': self.previous,
+            'previous_label': self.previous_label,
         }
 
     def fetch_instruction_set(self):
@@ -66,6 +66,7 @@ class ResourceBase():
         log.debug('')
         return ['POST', 'GET']
 
+#   @pysnooper.snoop()
     def fetch_action_instruction_set_target_url(self):
         log.debug('')
         return self.config.cloud_config['ewsc-url']
@@ -222,6 +223,15 @@ class ResourceBase():
 
     # CORE
 
+    def previous(self):
+        log.debug('')
+        previous = self.fetch_instruction_set()
+        if not previous or isinstance(previous, dict) and \
+                previous.get('failed'):
+            return previous
+        previous.update({'failed': False})
+        return previous
+
 #   @pysnooper.snoop('logs/ewcc.log')
     def purge(self, *args, **kwargs):
         log.debug('')
@@ -273,6 +283,7 @@ class ResourceBase():
         log.debug('')
         return self.instruction_set_response if not raw else self.response
 
+#   @pysnooper.snoop()
     def state(self, **kwargs):
         log.debug('')
         state = kwargs.get('state') or {}

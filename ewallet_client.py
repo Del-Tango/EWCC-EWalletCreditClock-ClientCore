@@ -8,22 +8,8 @@ import pysnooper
 from base.config import Config
 from base import *
 
-
-def log_init():
-    log_config = Config().log_config
-    log = logging.getLogger(log_config['log-name'])
-    log.setLevel(logging.DEBUG)
-    file_handler = logging.FileHandler(log_config['log-path'], 'a')
-    formatter = logging.Formatter(
-        log_config['log-record-format'],
-        log_config['log-date-format'],
-    )
-    file_handler.setFormatter(formatter)
-    log.addHandler(file_handler)
-    return log
-
-
-log = log_init()
+config = Config(config_file='conf/ewcc.conf')
+log = config.log_init()
 
 
 class EWalletClientCore():
@@ -39,13 +25,29 @@ class EWalletClientCore():
         self.response = None
         self.timestamp = None
         self.config_file = kwargs.get('config_file') or 'conf/ewcc.conf'
-        self.config = Config(config_file=self.config_file)
+        self.config = config
         self.execution_category = str()
-        self.previous = str()
+        self.previous_label = str()
         self.previous_action = str()
         self.previous_event = str()
 
     # FETCHERS
+
+    def fetch_last_core_execution_type(self):
+        log.debug('')
+        return self.execution_category
+
+    def fetch_last_executed_resource(self):
+        log.debug('')
+        return self.previous_label
+
+    def fetch_last_executed_action(self):
+        log.debug('')
+        return self.previous_action
+
+    def fetch_last_executed_event(self):
+        log.debug('')
+        return self.previous_event
 
     def fetch_action_resource_handler_map(self):
         log.debug('')
@@ -67,8 +69,8 @@ class EWalletClientCore():
             'instruction_set_response': dict(),
             'response': None,
             'timestamp': None,
-            'execute': str(),
-            'previous': str(),
+            'execution_category': str(),
+            'previous_label': str(),
             'previous_action': str(),
             'previous_event': str(),
         }
@@ -79,6 +81,7 @@ class EWalletClientCore():
         resource_map.update(self.events)
         return resource_map
 
+#   @pysnooper.snoop()
     def fetch_ewallet_client_core_values(self):
         log.debug('')
         value_set = {
@@ -93,8 +96,8 @@ class EWalletClientCore():
             'timestamp': self.timestamp,
             'config_file': self.config_file,
             'config': self.config.fetch_settings(),
-            'execute': self.execution_category,
-            'previous': self.previous,
+            'execution_category': self.execution_category,
+            'previous_label': self.previous_label,
             'previous_action': self.previous_action,
             'previous_event': self.previous_event,
         }
@@ -180,13 +183,13 @@ class EWalletClientCore():
         if resource_type == 'action':
             resource_state.update({
                 'execution_category': 'action',
-                'previous': target_label,
+                'previous_label': target_label,
                 'previous_action': target_label,
             })
         elif resource_type == 'event':
             resource_state.update({
                 'execution_category': 'event',
-                'previous': target_label,
+                'previous_label': target_label,
                 'previous_event': target_label,
             })
         else:
@@ -248,8 +251,45 @@ class EWalletClientCore():
     # TODO
     def new_issue_report(self, *args, **kwargs):
         log.debug('TODO - Not yet implemented.')
+
+    def previous_action_execution(self, *args, **kwargs):
+        log.debug('')
+        return {
+            'failed': False,
+            'action': self.fetch_last_executed_action(),
+        }
+
+    def previous_event_execution(self, *args, **kwargs):
+        log.debug('')
+        return {
+            'failed': False,
+            'event': self.fetch_last_executed_event(),
+        }
+
+    def previous_execution(self, *args, **kwargs):
+        log.debug('')
+        return {
+            'failed': False,
+            'execution': self.fetch_last_core_execution_type(),
+            'previous': self.fetch_last_executed_resource(),
+        }
+
+#   @pysnooper.snoop()
     def previous(self, *args, **kwargs):
-        log.debug('TODO')
+        log.debug('')
+        if not args:
+            return self.previous_execution(**kwargs)
+        if 'action' in args:
+            return self.previous_action_execution(*args, **kwargs)
+        elif 'event' in args:
+            return self.previous_event_execution(*args, **kwargs)
+        resource_map = self.fetch_complete_resource_map()
+        if args[0] not in resource_map:
+            return self.error_invalid_resource_label(args[0])
+        try:
+            return resource_map[args[0]].previous()
+        except:
+            return self.error_could_not_fetch_previous_execution(args, kwargs)
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def action_resource_purge(self, *args, **kwargs):
@@ -583,6 +623,16 @@ class EWalletClientCore():
         return core_response
 
     # ERRORS
+
+    def error_could_not_fetch_previous_execution(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not fetch previous execution. '
+                     'Details: {}'.format(args),
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_could_not_purge_all_action_resource_handlers(self, *args):
         core_response = {

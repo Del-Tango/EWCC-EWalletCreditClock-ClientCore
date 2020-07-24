@@ -4,7 +4,8 @@ import logging
 from .config import Config
 from .action_base import ActionBase
 
-config = Config()
+config = Config(config_file='conf/ewcc.conf')
+config.config_init()
 log = logging.getLogger(config.log_config['log-name'])
 
 
