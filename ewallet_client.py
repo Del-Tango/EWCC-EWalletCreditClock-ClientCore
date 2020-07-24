@@ -5,6 +5,7 @@ import requests
 import logging
 import pysnooper
 import socket
+import os
 
 from base.config import Config
 from base import *
@@ -252,6 +253,10 @@ class EWalletClientCore():
     # TODO
     def new_issue_report(self, *args, **kwargs):
         log.debug('TODO - Not yet implemented.')
+
+    def config_reload(self, *args, **kwargs):
+        log.debug('')
+        return self.config.config_reload(*args, **kwargs)
 
 #   @pysnooper.snoop()
     def server_online(self, *args, **kwargs):

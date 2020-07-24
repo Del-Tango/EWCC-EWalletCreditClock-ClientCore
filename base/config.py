@@ -2,6 +2,7 @@ import datetime
 import configparser
 import logging
 import pysnooper
+import os
 
 config = configparser.ConfigParser()
 config._interpolation = configparser.ExtendedInterpolation()
@@ -105,6 +106,19 @@ class Config():
 
     # CORE
 
+    def config_reload(self, *args, **kwargs):
+        if not args:
+            return self.error_no_config_reload_target_specified(args, kwargs)
+        if not os.path.isfile(args[0]):
+            return self.warning_config_reload_target_not_a_file(args, kwargs)
+        self.config_file = None
+        config_reload = self.config_init(config_file=args[0])
+        return self.warning_could_not_reload_settings(args, kwargs) \
+            if not config_reload else {
+                'failed': False,
+                'config': self.fetch_settings()
+            }
+
     def purge(self, *args, **kwargs):
         purge_map = self.fetch_config_purge_map()
         purge_fields = kwargs.get('purge') or purge_map.keys()
@@ -126,7 +140,23 @@ class Config():
                 'config': self.fetch_settings(),
             }
 
-    # WARNING
+    # WARNINGS
+
+    def warning_could_not_reload_settings(self, *args):
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. '
+                       'Could not reload settings from configurations file. '
+                       'Details: {}'.format(args)
+        }
+        return core_response
+
+    def warning_config_reload_target_not_a_file(self, *args):
+        core_response = {
+            'failed': True,
+            'warning': 'Config reload target is not a file. Details: {}'.format(args)
+        }
+        return core_response
 
     def warning_no_client_core_config_fields_set(self, *args):
         core_response = {
@@ -145,6 +175,16 @@ class Config():
                        .format(args),
         }
 #       self.log.warning(core_response['warning'])
+        return core_response
+
+    # ERRORS
+
+    def error_no_config_reload_target_specified(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'No config reload target specified. Details: {}'.format(args)
+        }
+#       log.error(core_response['error'])
         return core_response
 
     # CODE DUMP

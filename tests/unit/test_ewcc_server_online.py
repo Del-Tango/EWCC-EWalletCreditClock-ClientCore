@@ -16,9 +16,9 @@ class TestEwalletClientServerOnline(unittest.TestCase):
     def tearDownClass(cls):
         pass
 
-    def test_ewcc_response_core_unit(self):
-        print('[ * ]: EWCC Subroutine Server Online -')
-        self.core.config.config_init()
+    def test_ewcc_server_online_unit(self):
+        print('[ * ]: EWCC Subroutine ServerOnline -')
+        self.core.config_reload(config_file)
         response = self.core.server_online()
         print(
             "[ I ]: core.server_online() \n"
