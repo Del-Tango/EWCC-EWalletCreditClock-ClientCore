@@ -4,6 +4,7 @@ import json
 import requests
 import logging
 import pysnooper
+import socket
 
 from base.config import Config
 from base import *
@@ -251,6 +252,35 @@ class EWalletClientCore():
     # TODO
     def new_issue_report(self, *args, **kwargs):
         log.debug('TODO - Not yet implemented.')
+
+#   @pysnooper.snoop()
+    def server_online(self, *args, **kwargs):
+        log.debug('')
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            response = sock.connect_ex((
+                self.config.cloud_config['ewsc-address']\
+                    .strip('https://').strip('http://'),
+                self.config.cloud_config['ewsc-port'],
+            ))
+            return {
+                'failed': False,
+                'server': 'online' if response == 0 else 'offline'
+            }
+        except:
+            return self.error_server_online_check_failure(args, kwargs)
+        finally:
+            sock.close()
+
+    def error_server_online_check_failure(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not check if EWSC services are available. '
+                     'Details: {}'.format(args)
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def previous_action_execution(self, *args, **kwargs):
         log.debug('')

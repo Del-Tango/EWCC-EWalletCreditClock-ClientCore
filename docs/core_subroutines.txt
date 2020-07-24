@@ -2,6 +2,20 @@
 #               EWallet Credit Clock - Client Core Subroutines
 ###############################################################################
 
+
+[ * ]: EWCC Subroutine ServerOnline
+[ I ]: core.server_online()
+[ O ][ OK  ]: {
+    'failed': False,
+    'server': <status type-str>
+}
+[ 0 ][ NOK ]: {
+    'failed': True,
+    'error': <error-message type-str>,
+    'warning': <warning-message type-str>
+}
+
+
 [ * ]: EWCC Subroutine ExecuteResource
 [ I ]: core.execute('<resource-label type-str>')
 [ O ][ OK  ]: {
