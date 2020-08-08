@@ -21,6 +21,7 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
             'StopClockTimer',
             'AccountLogin',
             'AccountLogout',
+            'RecoverAccount',
             'AddContactRecord',
             'ConvertClockToCredits',
             'ConvertCreditsToClock',
