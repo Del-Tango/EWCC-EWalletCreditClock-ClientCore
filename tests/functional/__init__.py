@@ -42,6 +42,7 @@ from . import test_action_create_conversion_sheet
 from . import test_action_create_time_sheet
 from . import test_action_create_contact_list
 
+from . import test_action_switch_session_user
 from . import test_action_switch_credit_ewallet
 from . import test_action_switch_credit_clock
 from . import test_action_switch_transfer_sheet

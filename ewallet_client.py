@@ -7,10 +7,12 @@ import pysnooper
 import socket
 import os
 
-#from . import base
-
-from .base.config import Config
-from .base import *
+# TODO - Uncomment in production, comment for testing
+#from .base.config import Config
+#from .base import *
+# TODO - Comment in production, uncomment for testing
+from base.config import Config
+from base import *
 
 config_file = __name__.split('.')
 config_file.remove(config_file[-1])
@@ -139,7 +141,7 @@ class EWalletClientCore():
             'EditAccount': action_edit_account.EditAccount,
             'PayCredits': action_pay_credits.PayCredits,
             'SupplyCredits': action_supply_credits.SupplyCredits,
-            'SwitchActiveSessionUser': action_switch_active_session_user.SwitchActiveSessionUser,
+            'SwitchSessionUser': action_switch_active_session_user.SwitchSessionUser,
             'SwitchContactList': action_switch_contact_list.SwitchContactList,
             'SwitchConversionSheet': action_switch_conversion_sheet.SwitchConversionSheet,
             'SwitchCreditClock': action_switch_credit_clock.SwitchCreditClock,
