@@ -11,6 +11,7 @@ from . import action_start_clock_timer
 from . import action_stop_clock_timer
 from . import action_account_login
 from . import action_account_logout
+from . import action_recover_account
 from . import action_add_contact_record
 from . import action_convert_clock2credits
 from . import action_convert_credits2clock

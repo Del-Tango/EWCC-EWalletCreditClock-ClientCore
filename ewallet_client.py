@@ -116,6 +116,7 @@ class EWalletClientCore():
             'StopClockTimer': action_stop_clock_timer.StopClockTimer,
             'AccountLogin': action_account_login.AccountLogin,
             'AccountLogout': action_account_logout.AccountLogout,
+            'RecoverAccount': action_recover_account.RecoverAccount,
             'AddContactRecord': action_add_contact_record.AddContactRecord,
             'ConvertClockToCredits': action_convert_clock2credits.ConvertClockToCredits,
             'ConvertCreditsToClock': action_convert_credits2clock.ConvertCreditsToClock,

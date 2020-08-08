@@ -11,6 +11,7 @@ from . import test_action_convert_clock2credits
 from . import test_action_add_contact_record
 from . import test_action_transfer_credits
 from . import test_action_edit_account
+from . import test_action_recover_account
 
 from . import test_action_clock_timer_start
 from . import test_action_clock_timer_pause
