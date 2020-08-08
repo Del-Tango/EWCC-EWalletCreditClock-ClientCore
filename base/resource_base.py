@@ -27,6 +27,10 @@ class ResourceBase():
 
     # FETCHERS
 
+    def fetch_resource_instruction_set(self):
+        log.debug('')
+        return self.instruction_set
+
     def fetch_resource_purge_map(self):
         log.debug('')
         return {
@@ -223,6 +227,15 @@ class ResourceBase():
 
     # CORE
 
+    def execute(self, *args, **kwargs):
+        log.debug('')
+        instruction_set = self.fetch_resource_instruction_set() \
+            if not args or not isinstance(args[0], dict) else args[0]
+        target_url = self.fetch_action_instruction_set_target_url()
+        formatted_data = self.format_data_set_for_api_call(instruction_set)
+        api_call = self.issue_api_call('POST', target_url, formatted_data)
+        return self.process_api_call(instruction_set, api_call)
+
     def previous(self):
         log.debug('')
         previous = self.fetch_instruction_set()
@@ -289,13 +302,6 @@ class ResourceBase():
         state = kwargs.get('state') or {}
         state.update(self.fetch_resource_values())
         return state
-
-    def execute(self, instruction_set):
-        log.debug('')
-        target_url = self.fetch_action_instruction_set_target_url()
-        formatted_data = self.format_data_set_for_api_call(instruction_set)
-        api_call = self.issue_api_call('POST', target_url, formatted_data)
-        return self.process_api_call(instruction_set, api_call)
 
     # WARNINGS
 

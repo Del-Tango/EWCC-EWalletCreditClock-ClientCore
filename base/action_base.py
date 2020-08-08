@@ -15,14 +15,16 @@ class ActionBase(ResourceBase):
         log.debug('')
         return super(ActionBase, self).__init__(*args, **kwargs)
 
-    def execute(self, instruction_set):
+    def execute(self, *args, **kwargs):
         log.debug('')
-        if not instruction_set or isinstance(instruction_set, dict) and \
-                instruction_set.get('failed'):
-            return instruction_set
-        return super(ActionBase, self).execute(instruction_set)
+        return super(ActionBase, self).execute(*args, **kwargs)
 
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
         return super(ActionBase, self).set_values(value_set, *args, **kwargs)
+
+# CODE DUMP
+#       if not instruction_set or isinstance(instruction_set, dict) and \
+#               instruction_set.get('failed'):
+#           return instruction_set
 
