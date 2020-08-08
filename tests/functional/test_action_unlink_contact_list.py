@@ -19,6 +19,7 @@ class TestEwalletClientExecuteActionUnlinkContactList(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkContactList',
+                'CreateContactList', 'ViewAccount'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -59,16 +60,35 @@ class TestEwalletClientExecuteActionUnlinkContactList(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'ViewAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute ViewAccount')
+        cls.response = cls.core.execute('ViewAccount')
+        cls.contact_list  = cls.response['account_data']['contact_list']
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'UnlinkContactList',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'list_id': 1,
+                'list_id': cls.contact_list,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
+        cls.core.set_values(
+            'CreateContactList',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        cls.core.execute('CreateContactList')
         cls.core.set_values(
             'UnlinkAccount',
             **{

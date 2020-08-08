@@ -19,6 +19,7 @@ class TestEwalletClientExecuteActionUnlinkTimeRecord(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkTimeRecord',
+                'ViewTimeSheet', 'StartClockTimer', 'StopClockTimer'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -57,18 +58,48 @@ class TestEwalletClientExecuteActionUnlinkTimeRecord(unittest.TestCase):
         )
         print('[...]: Subroutine Execute AccountLogin')
         cls.core.execute('AccountLogin')
+
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
+            'ViewTimeSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute ViewTimeSheet')
+        cls.response = cls.core.execute('ViewTimeSheet')
+        records = cls.response['sheet_data']['records']
+        cls.record = None if not records else int(list(records.keys())[0])
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
             'UnlinkTimeRecord',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'record_id': 1,
+                'record_id': cls.record,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
+        cls.core.set_values(
+            'StartClockTimer',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        cls.core.execute('StartClockTimer')
+        cls.core.set_values(
+            'StopClockTimer',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        cls.core.execute('StopClockTimer')
         cls.core.set_values(
             'UnlinkAccount',
             **{

@@ -19,6 +19,7 @@ class TestEwalletClientExecuteActionUnlinkConversionRecord(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkConversionRecord',
+                'ViewConversionSheet', 'SupplyCredits', 'ConvertCreditsToClock'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -59,16 +60,50 @@ class TestEwalletClientExecuteActionUnlinkConversionRecord(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'ViewConversionSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute ViewConversionSheet')
+        cls.response = cls.core.execute('ViewConversionSheet')
+        records = cls.response['sheet_data']['records']
+        cls.record = None if not records else int(list(records.keys())[0])
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'UnlinkConversionRecord',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'record_id': 1,
+                'record_id': cls.record,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
+        cls.core.set_values(
+            'SupplyCredits',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'credits': 10,
+                'currency': 'RON',
+                'cost': 4.7,
+                'notes': 'Notes added by EWCC functional test suit.'
+            }
+        )
+        cls.core.execute('SupplyCredits')
+        cls.core.set_values(
+            'ConvertCreditsToClock',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'credits': '10',
+                'notes': 'Notes added by EWCC functional test suit.'
+            }
+        )
+        cls.core.execute('ConvertCreditsToClock')
         cls.core.set_values(
             'UnlinkAccount',
             **{

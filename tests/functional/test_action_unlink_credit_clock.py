@@ -19,6 +19,7 @@ class TestEwalletClientExecuteActionUnlinkCreditClock(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkCreditClock',
+                'ViewCreditEWallet', 'CreateCreditClock'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -59,16 +60,35 @@ class TestEwalletClientExecuteActionUnlinkCreditClock(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'ViewCreditEWallet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute AccountLogin')
+        cls.response = cls.core.execute('ViewCreditEWallet')
+        cls.clock = cls.response['ewallet_data']['clock']
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'UnlinkCreditClock',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'clock_id': 1,
+                'clock_id': cls.clock,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
+        cls.core.set_values(
+            'CreateCreditClock',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        cls.core.execute('CreateCreditClock')
         cls.core.set_values(
             'UnlinkAccount',
             **{

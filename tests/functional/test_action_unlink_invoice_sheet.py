@@ -5,7 +5,7 @@ from ewallet_client import EWalletClientCore
 config_file = 'conf/ewcc.conf'
 
 
-class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
+class TestEwalletClientExecuteActionUnlinkInvoiceSheet(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -18,8 +18,8 @@ class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
-                'AccountLogin', 'UnlinkAccount', 'UnlinkConversionSheet',
-                'ViewCreditClock', 'CreateConversionSheet'
+                'AccountLogin', 'UnlinkAccount', 'UnlinkInvoiceSheet',
+                'ViewCreditEWallet', 'CreateInvoiceSheet'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -60,35 +60,35 @@ class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
-            'ViewCreditClock',
+            'ViewCreditEWallet',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
             }
         )
-        print('[...]: Subroutine Execute AccountLogin')
-        cls.response = cls.core.execute('ViewCreditClock')
-        cls.conversion_sheet = cls.response['clock_data']['conversion_sheet']
+        print('[...]: Subroutine Execute ViewCreditEWallet')
+        cls.response = cls.core.execute('ViewCreditEWallet')
+        cls.invoice_sheet = cls.response['ewallet_data']['invoice_sheet']
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
-            'UnlinkConversionSheet',
+            'UnlinkInvoiceSheet',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'list_id': cls.conversion_sheet,
+                'list_id': cls.invoice_sheet,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
         cls.core.set_values(
-            'CreateConversionSheet',
+            'CreateInvoiceSheet',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
             }
         )
-        response = cls.core.execute('CreateConversionSheet')
+        cls.core.execute('CreateInvoiceSheet')
         cls.core.set_values(
             'UnlinkAccount',
             **{
@@ -98,15 +98,15 @@ class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
         )
         cls.core.execute('UnlinkAccount')
 
-    def test_ewcc_set_core_execute_action_unlink_conversion_sheet_functional(self):
-        print('\n[ * ]: EWCC Subroutine Execute Action UnlinkConversionSheet -')
-        execute = self.core.execute('UnlinkConversionSheet')
+    def test_ewcc_set_core_execute_action_unlink_invoice_sheet_functional(self):
+        print('\n[ * ]: EWCC Subroutine Execute Action UnlinkInvoiceSheet -')
+        execute = self.core.execute('UnlinkInvoiceSheet')
         print(
-            "[ I ]: core.execute('UnlinkConversionSheet') \n"
+            "[ I ]: core.execute('UnlinkInvoiceSheet') \n"
             + "[ O ]: " + str(execute) + '\n'
         )
         self.assertTrue(isinstance(execute, dict))
         self.assertFalse(execute.get('failed'))
         self.assertEqual(len(execute.keys()), 2)
-        self.assertTrue(isinstance(execute.get('conversion_sheet'), int))
+        self.assertTrue(isinstance(execute.get('invoice_sheet'), int))
         return execute

@@ -19,6 +19,7 @@ class TestEwalletClientExecuteActionUnlinkTransferSheet(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkTransferSheet',
+                'ViewCreditEWallet', 'CreateTransferSheet'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -59,16 +60,35 @@ class TestEwalletClientExecuteActionUnlinkTransferSheet(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'ViewCreditEWallet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute ViewCreditEWallet')
+        cls.response = cls.core.execute('ViewCreditEWallet')
+        cls.transfer_sheet = cls.response['ewallet_data']['transfer_sheet']
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'UnlinkTransferSheet',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'list_id': 1,
+                'list_id': cls.transfer_sheet,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
+        cls.core.set_values(
+            'CreateTransferSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        cls.core.execute('CreateTransferSheet')
         cls.core.set_values(
             'UnlinkAccount',
             **{

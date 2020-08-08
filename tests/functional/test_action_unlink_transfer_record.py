@@ -19,6 +19,7 @@ class TestEwalletClientExecuteActionUnlinkTransferRecord(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkTransferRecord',
+                'ViewTransferSheet', 'SupplyCredits', 'PayCredits'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -59,16 +60,50 @@ class TestEwalletClientExecuteActionUnlinkTransferRecord(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'ViewTransferSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute ViewTransferSheet')
+        cls.response = cls.core.execute('ViewTransferSheet')
+        records = cls.response['sheet_data']['records']
+        cls.record = None if not records else int(list(records.keys())[0])
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'UnlinkTransferRecord',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'record_id': 1,
+                'record_id': cls.record,
             }
         )
 
     @classmethod
     def tearDownClass(cls):
+        cls.core.set_values(
+            'SupplyCredits',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'credits': 10,
+                'currency': 'RON',
+                'cost': 4.7,
+                'notes': 'Notes added by EWCC functional test suit.'
+            }
+        )
+        cls.core.execute('SupplyCredits')
+        cls.core.set_values(
+            'PayCredits',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'pay': 'ewsc.systemcore@alvearesolutions.ro',
+                'credits': '10',
+            }
+        )
+        cls.core.execute('PayCredits')
         cls.core.set_values(
             'UnlinkAccount',
             **{
