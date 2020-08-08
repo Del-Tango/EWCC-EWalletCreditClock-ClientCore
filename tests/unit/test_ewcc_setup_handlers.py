@@ -36,7 +36,7 @@ class TestEwalletClientCoreSetupHandlers(unittest.TestCase):
             'EditAccount',
             'PayCredits',
             'SupplyCredits',
-            'SwitchActiveSessionUser',
+            'SwitchSessionUser',
             'SwitchContactList',
             'SwitchConversionSheet',
             'SwitchCreditClock',
