@@ -19,7 +19,7 @@ class TestEwalletClientExecuteActionUnlinkCreditEWallet(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkCreditEWallet',
-                'ViewAccount', 'CreateCreditEWallet'
+                'ViewAccount', 'CreateCreditEWallet', 'SwitchCreditEWallet'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -88,7 +88,16 @@ class TestEwalletClientExecuteActionUnlinkCreditEWallet(unittest.TestCase):
                 'session_token': cls.session_token.get('session_token'),
             }
         )
-        cls.core.execute('CreateCreditEWallet')
+        response = cls.core.execute('CreateCreditEWallet')
+        cls.core.set_values(
+            'SwitchCreditEWallet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'ewallet_id': response['ewallet'],
+            }
+        )
+        cls.core.execute('SwitchCreditEWallet')
         cls.core.set_values(
             'UnlinkAccount',
             **{

@@ -19,7 +19,8 @@ class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkConversionSheet',
-                'ViewCreditClock', 'CreateConversionSheet'
+                'ViewCreditClock', 'CreateConversionSheet',
+                'SwitchConversionSheet'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -89,6 +90,15 @@ class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
             }
         )
         response = cls.core.execute('CreateConversionSheet')
+        cls.core.set_values(
+            'SwitchConversionSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'sheet_id': response['conversion_sheet'],
+            }
+        )
+        cls.core.execute('SwitchConversionSheet')
         cls.core.set_values(
             'UnlinkAccount',
             **{

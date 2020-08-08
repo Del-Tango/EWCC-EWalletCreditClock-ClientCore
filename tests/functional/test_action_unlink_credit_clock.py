@@ -19,7 +19,7 @@ class TestEwalletClientExecuteActionUnlinkCreditClock(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkCreditClock',
-                'ViewCreditEWallet', 'CreateCreditClock'
+                'ViewCreditEWallet', 'CreateCreditClock', 'SwitchCreditClock'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -86,6 +86,15 @@ class TestEwalletClientExecuteActionUnlinkCreditClock(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        response = cls.core.execute('CreateCreditClock')
+        cls.core.set_values(
+            'SwitchCreditClock',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'clock_id': response['clock']
             }
         )
         cls.core.execute('CreateCreditClock')

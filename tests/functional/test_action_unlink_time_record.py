@@ -58,8 +58,26 @@ class TestEwalletClientExecuteActionUnlinkTimeRecord(unittest.TestCase):
         )
         print('[...]: Subroutine Execute AccountLogin')
         cls.core.execute('AccountLogin')
-
-
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
+            'StartClockTimer',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute StartClockTimer')
+        cls.core.execute('StartClockTimer')
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
+            'StopClockTimer',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute StopClockTimer')
+        cls.core.execute('StopClockTimer')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
             'ViewTimeSheet',

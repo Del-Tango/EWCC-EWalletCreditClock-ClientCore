@@ -60,6 +60,21 @@ class TestEwalletClientExecuteActionUnlinkContactRecord(unittest.TestCase):
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'AddContactRecord',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_name': 'TestContactRecord',
+                'user_email': 'test@contact.com',
+                'user_reference': 'TContact',
+                'user_phone': '555 555 555',
+                'notes': 'Notes added by EWCC functional test suit.',
+            }
+        )
+        print('[...]: Subroutine Execute AddContactRecord')
+        cls.response = cls.core.execute('AddContactRecord')
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'ViewContactList',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -69,10 +84,7 @@ class TestEwalletClientExecuteActionUnlinkContactRecord(unittest.TestCase):
         print('[...]: Subroutine Execute ViewContactList')
         cls.response = cls.core.execute('ViewContactList')
         records = cls.response['list_data']['records']
-        if not records:
-            cls.record = None
-        else:
-            cls.record = int(list(records.keys())[0])
+        cls.record = None if not records else int(list(records.keys())[0])
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
             'UnlinkContactRecord',

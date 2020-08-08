@@ -19,7 +19,7 @@ class TestEwalletClientExecuteActionUnlinkContactList(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'UnlinkContactList',
-                'CreateContactList', 'ViewAccount'
+                'CreateContactList', 'ViewAccount', 'SwitchContactList'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -88,7 +88,16 @@ class TestEwalletClientExecuteActionUnlinkContactList(unittest.TestCase):
                 'session_token': cls.session_token.get('session_token'),
             }
         )
-        cls.core.execute('CreateContactList')
+        response = cls.core.execute('CreateContactList')
+        cls.core.set_values(
+            'SwitchContactList',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'list_id': response['contact_list'],
+            }
+        )
+        cls.core.execute('SwitchContactList')
         cls.core.set_values(
             'UnlinkAccount',
             **{
