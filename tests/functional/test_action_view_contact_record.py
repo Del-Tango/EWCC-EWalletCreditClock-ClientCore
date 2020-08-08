@@ -19,7 +19,7 @@ class TestEwalletClientExecuteActionViewContactRecord(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'AddContactRecord',
-                'ViewContactRecord',
+                'ViewContactList', 'ViewContactRecord',
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -73,13 +73,27 @@ class TestEwalletClientExecuteActionViewContactRecord(unittest.TestCase):
         )
         print('[...]: Subroutine Execute AddContactRecord')
         cls.core.execute('AddContactRecord')
+
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
+            'ViewContactList',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute AddContactRecord')
+        cls.response = cls.core.execute('ViewContactList')
+        records = cls.response['list_data']['records']
+        cls.record = None if not records else int(list(records.keys())[0])
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
             'ViewContactRecord',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'record_id': 1,
+                'record_id': cls.record,
             }
         )
 

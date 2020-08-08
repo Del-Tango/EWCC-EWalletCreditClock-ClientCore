@@ -5,7 +5,7 @@ from ewallet_client import EWalletClientCore
 config_file = 'conf/ewcc.conf'
 
 
-class TestEwalletClientExecuteActionViewTransferRecord(unittest.TestCase):
+class TestEwalletClientExecuteActionAccountLogout(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -18,18 +18,14 @@ class TestEwalletClientExecuteActionViewTransferRecord(unittest.TestCase):
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
-                'AccountLogin', 'UnlinkAccount', 'SupplyCredits',
-                'TransferCredits', 'ViewTransferRecord', 'ViewTransferSheet'
+                'AccountLogin', 'AccountLogout', 'UnlinkAccount'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
         cls.client_id = cls.core.execute('RequestClientID')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
-            'RequestSessionToken',
-            **{
-                'client_id': cls.client_id.get('client_id')
-            }
+            'RequestSessionToken', **{'client_id': cls.client_id.get('client_id')}
         )
         print('[...]: Subroutine Execute RequestSessionToken')
         cls.session_token = cls.core.execute('RequestSessionToken')
@@ -53,56 +49,17 @@ class TestEwalletClientExecuteActionViewTransferRecord(unittest.TestCase):
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
                 'user_name': 'EWCC-TestUserName',
-                'user_pass': '1234abcs!@#$',
+                'user_pass': '1234abcs!@#$'
             }
         )
         print('[...]: Subroutine Execute AccountLogin')
         cls.core.execute('AccountLogin')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
-            'SupplyCredits',
+            'AccountLogout',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'credits': 10,
-                'currency': 'RON',
-                'cost': 4.7,
-                'notes': 'Notes added by EWCC functional test suit.'
-            }
-        )
-        print('[...]: Subroutine Execute SupplyCredits')
-        cls.core.execute('SupplyCredits')
-        print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
-            'TransferCredits',
-            **{
-                'client_id': cls.client_id.get('client_id'),
-                'session_token': cls.session_token.get('session_token'),
-                'transfer_to': 'ewsc.systemcore@alvearesolutions.ro',
-                'credits': 10,
-            }
-        )
-        print('[...]: Subroutine Execute TransferCredits')
-        cls.core.execute('TransferCredits')
-        print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
-            'ViewTransferSheet',
-            **{
-                'client_id': cls.client_id.get('client_id'),
-                'session_token': cls.session_token.get('session_token'),
-            }
-        )
-        print('[...]: Subroutine Execute ViewTransferSheet')
-        cls.response = cls.core.execute('ViewTransferSheet')
-        records = cls.response['sheet_data']['records']
-        cls.record = None if not records else int(list(records.keys())[0])
-        print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
-            'ViewTransferRecord',
-            **{
-                'client_id': cls.client_id.get('client_id'),
-                'session_token': cls.session_token.get('session_token'),
-                'record_id': cls.record,
             }
         )
 
@@ -117,17 +74,16 @@ class TestEwalletClientExecuteActionViewTransferRecord(unittest.TestCase):
         )
         cls.core.execute('UnlinkAccount')
 
-    def test_ewcc_set_core_execute_action_view_transfer_record_functional(self):
-        print('\n[ * ]: EWCC Subroutine Execute Action ViewTransferRecord -')
-        execute = self.core.execute('ViewTransferRecord')
+    def test_ewcc_set_core_execute_action_account_logout_functional(self):
+        print('\n[ * ]: EWCC Subroutine Execute Action AccountLogout -')
+        execute = self.core.execute('AccountLogout')
         print(
-            "[ I ]: core.execute('ViewTransferRecord') \n"
+            "[ I ]: core.execute('AccountLogout') \n"
             + "[ O ]: " + str(execute) + '\n'
         )
         self.assertTrue(isinstance(execute, dict))
         self.assertFalse(execute.get('failed'))
-        self.assertEqual(len(execute.keys()), 4)
-        self.assertTrue(isinstance(execute.get('transfer_sheet'), int))
-        self.assertTrue(isinstance(execute.get('transfer_record'), int))
-        self.assertTrue(isinstance(execute.get('record_data'), dict))
+        self.assertEqual(len(execute.keys()), 3)
+        self.assertTrue(isinstance(execute.get('account'), str))
+        self.assertTrue(isinstance(execute.get('session_data'), dict))
         return execute

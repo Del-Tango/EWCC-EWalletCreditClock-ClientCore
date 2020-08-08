@@ -19,7 +19,7 @@ class TestEwalletClientExecuteActionViewTimeRecord(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateNewAccount',
                 'AccountLogin', 'UnlinkAccount', 'StartClockTimer',
-                'StopClockTimer', 'ViewTimeRecord'
+                'StopClockTimer', 'ViewTimeRecord', 'ViewTimeSheet'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -80,11 +80,23 @@ class TestEwalletClientExecuteActionViewTimeRecord(unittest.TestCase):
         cls.core.execute('StopClockTimer')
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'ViewTimeSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        print('[...]: Subroutine Execute StopClockTimer')
+        cls.response = cls.core.execute('ViewTimeSheet')
+        records = cls.response['sheet_data']['records']
+        cls.record = None if not records else int(list(records.keys())[0])
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'ViewTimeRecord',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'record_id': 1,
+                'record_id': cls.record,
             }
         )
 

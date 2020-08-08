@@ -3,6 +3,7 @@ from . import test_action_request_session_token
 
 from . import test_action_create_account
 from . import test_action_account_login
+from . import test_action_account_logout
 from . import test_action_supply_credits
 from . import test_action_pay_credits
 from . import test_action_convert_credits2clock
