@@ -5,9 +5,14 @@ from .action_base import ActionBase
 from .config import Config
 from .action_base import ActionBase
 
-config = Config(config_file='conf/ewcc.conf')
-config.config_init()
-log = logging.getLogger(config.log_config['log-name'])
+config_file = __name__.split('.')
+config_file.remove(config_file[-1])
+config_file.remove(config_file[-1])
+file_path = 'conf/ewcc.conf' if not config_file else \
+    '/'.join(item for item in config_file) + '/conf/ewcc.conf'
+config = Config(config_file=file_path)
+config.config_init(config_file=file_path)
+log = logging.getLogger(config.log_config.get('log-name') or __name__)
 
 
 class RecoverAccount(ActionBase):

@@ -1,3 +1,4 @@
 from . import base
 from . import ewallet_client
-from . import tests
+# Uncomment for testing
+#from . import tests

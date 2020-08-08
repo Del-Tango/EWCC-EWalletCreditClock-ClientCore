@@ -57,34 +57,44 @@ class Config():
                 return False
             self.config_file = config_file
         config.read(self.config_file)
-        self.log_config = {
-            'log-name': config['LogDetails'].get('log_name') or 'EWClientCore',
-            'log-level': config['LogDetails'].get('log_level') or 'DEBUG',
-            'log-dir': config['LogDetails'].get('log_dir') or 'logs',
-            'log-file': config['LogDetails'].get('log_file') or 'ewcc.log',
-            'log-path': config['LogDetails'].get('log_path') or 'logs/ewcc.log',
-            'log-record-format': '[ %(asctime)s ] %(name)s '
-                '[ %(levelname)s ] - %(filename)s - %(lineno)d: '
-                '%(funcName)s - %(message)s',
-            'log-date-format': "%d-%m-%Y %H:%M:%S",
-        }
-        self.cloud_config = {
-            'ewsc-address': config['CloudDetails'].get('ewsc_address') or
-                'https://alvearesolutions.com',
-            'ewsc-port': int(config['CloudDetails'].get('ewsc_port')) or 80,
-            'ewsc-url': config['CloudDetails'].get('ewsc_url') or
-                '/ewallet/instruction-set',
-            'ewsc-cert': config['CloudDetails'].get('ewsc_cert'),
-            'ewsc-master-login': config['CloudDetails'].get('ewsc_master_login'),
-            'ewsc-master-sequence': config['CloudDetails'].get('ewsc_master_sequence'),
-        }
+        if not config:
+            return False
+        if config['LogDetails']:
+            self.log_config = {
+                'log-name': config['LogDetails'].get('log_name') or 'EWClientCore',
+                'log-level': config['LogDetails'].get('log_level') or 'DEBUG',
+                'log-dir': config['LogDetails'].get('log_dir') or 'logs',
+                'log-file': config['LogDetails'].get('log_file') or 'ewcc.log',
+                'log-path': config['LogDetails'].get('log_path') or 'logs/ewcc.log',
+                'log-record-format': '[ %(asctime)s ] %(name)s '
+                    '[ %(levelname)s ] - %(filename)s - %(lineno)d: '
+                    '%(funcName)s - %(message)s',
+                'log-date-format': "%d-%m-%Y %H:%M:%S",
+            }
+        if config['CloudDetails']:
+            self.cloud_config = {
+                'ewsc-address': config['CloudDetails'].get('ewsc_address') or
+                    'https://alvearesolutions.com',
+                'ewsc-port': int(config['CloudDetails'].get('ewsc_port')) or 80,
+                'ewsc-url': config['CloudDetails'].get('ewsc_url') or
+                    '/ewallet/instruction-set',
+                'ewsc-cert': config['CloudDetails'].get('ewsc_cert'),
+                'ewsc-master-login': config['CloudDetails'].get('ewsc_master_login'),
+                'ewsc-master-sequence': config['CloudDetails'].get('ewsc_master_sequence'),
+            }
         return True
 
+#   @pysnooper.snoop()
     def log_init(self):
         if not self.config_file:
             return False
-        log = logging.getLogger(self.log_config['log-name'])
+        log = logging.getLogger(self.log_config.get('log-name') or __name__)
         log.setLevel(logging.DEBUG)
+        if not self.log_config or not self.log_config.get('log_path'):
+            config_reload = self.config_reload(self.config_file)
+            if not config_reload or isinstance(config_reload, dict) and \
+                    config_reload.get('failed') or not self.log_config:
+                return False
         file_handler = logging.FileHandler(self.log_config['log-path'], 'a')
         formatter = logging.Formatter(
             self.log_config['log-record-format'],

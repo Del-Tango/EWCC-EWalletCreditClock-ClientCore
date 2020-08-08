@@ -7,10 +7,17 @@ import pysnooper
 import socket
 import os
 
-from base.config import Config
-from base import *
+#from . import base
 
-config = Config(config_file='conf/ewcc.conf')
+from .base.config import Config
+from .base import *
+
+config_file = __name__.split('.')
+config_file.remove(config_file[-1])
+file_path = 'conf/ewcc.conf' if not config_file else \
+    '/'.join(item for item in config_file) + '/conf/ewcc.conf'
+config = Config(config_file=file_path)
+config.config_init(config_file=file_path)
 log = config.log_init()
 
 
@@ -26,7 +33,8 @@ class EWalletClientCore():
         self.instruction_set_response = dict()
         self.response = None
         self.timestamp = None
-        self.config_file = kwargs.get('config_file') or 'conf/ewcc.conf'
+        self.config_file = kwargs.get('config_file') or file_path
+        config.config_reload(self.config_file)
         self.config = config
         self.execution_category = str()
         self.previous_label = str()

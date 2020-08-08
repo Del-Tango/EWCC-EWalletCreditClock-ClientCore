@@ -1,8 +1,9 @@
 import unittest
+import os
 
 from ewallet_client import EWalletClientCore
 
-config_file = 'conf/ewcc.conf'
+config_file = os.getcwd() + '/conf/ewcc.conf'
 
 
 class TestEwalletClientExecuteActionRequestClientID(unittest.TestCase):
