@@ -30,7 +30,8 @@ class SwitchInvoiceSheet(ActionBase):
                 "controller": "client",
                 "ctype": "action",
                 "action": "switch",
-                "switch": "invoice_sheet",
+                "switch": "invoice",
+                "invoice": "list",
             }
         }
 

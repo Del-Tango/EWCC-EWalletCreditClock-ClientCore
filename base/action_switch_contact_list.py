@@ -30,7 +30,8 @@ class SwitchContactList(ActionBase):
                 "controller": "client",
                 "ctype": "action",
                 "action": "switch",
-                "switch": "contact_list",
+                "switch": "contact",
+                "contact": "list",
             }
         }
 

@@ -30,7 +30,8 @@ class SwitchTimeSheet(ActionBase):
                 "controller": "client",
                 "ctype": "action",
                 "action": "switch",
-                "switch": "time_sheet",
+                "switch": "time",
+                "time": "list",
             }
         }
 

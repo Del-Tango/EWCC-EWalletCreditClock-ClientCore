@@ -30,7 +30,8 @@ class SwitchTransferSheet(ActionBase):
                 "controller": "client",
                 "ctype": "action",
                 "action": "switch",
-                "switch": "transfer_sheet",
+                "switch": "transfer",
+                "transfer": "list",
             }
         }
 
