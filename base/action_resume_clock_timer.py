@@ -30,7 +30,7 @@ class ResumeClockTimer(ActionBase):
                 "controller": "client",
                 "ctype": "action",
                 "action": "resume",
-                "pause": "clock_timer",
+                "resume": "clock_timer",
             }
         }
 
