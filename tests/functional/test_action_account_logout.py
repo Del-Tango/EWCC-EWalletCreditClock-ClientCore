@@ -50,9 +50,9 @@ class TestEwalletClientExecuteActionAccountLogout(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'user_name': 'EWCC-TestUserName',
-                'user_email': 'test@ewcc.com',
-                'user_pass': '1234abcs!@#$'
+                'user_name': cls.user1_name,
+                'user_email': cls.user1_email,
+                'user_pass': cls.user1_pass,
             }
         )
         print('[...]: Subroutine Execute CreateNewAccount')

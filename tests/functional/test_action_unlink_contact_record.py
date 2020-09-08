@@ -103,7 +103,7 @@ class TestEwalletClientExecuteActionUnlinkContactRecord(unittest.TestCase):
 
         list_data = cls.response.get('list_data')
         records = [] if not list_data else cls.response['list_data']['records']
-        cls.record = int() if not records else int(list(records.keys())[0])
+        cls.record = 1 if not records else int(list(records.keys())[0])
 
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(

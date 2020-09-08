@@ -66,8 +66,8 @@ class TestEwalletClientExecuteActionUnlinkTransferRecord(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'user_name': 'EWCC-TestUserName',
-                'user_pass': '1234abcs!@#$',
+                'user_email': cls.user1_email,
+                'user_pass': cls.user1_pass,
             }
         )
         print('[...]: Subroutine Execute AccountLogin')
@@ -87,7 +87,7 @@ class TestEwalletClientExecuteActionUnlinkTransferRecord(unittest.TestCase):
         sheet_data = cls.response.get('sheet_data')
         records = [] if not sheet_data else \
             cls.response['sheet_data']['records']
-        cls.record = int() if not records else int(list(records.keys())[0])
+        cls.record = 1 if not records else int(list(records.keys())[0])
 
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(

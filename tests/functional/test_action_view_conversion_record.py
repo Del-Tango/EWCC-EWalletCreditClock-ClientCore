@@ -83,7 +83,8 @@ class TestEwalletClientExecuteActionViewConversionRecord(unittest.TestCase):
                 'credits': 10,
                 'currency': 'RON',
                 'cost': 4.7,
-                'notes': 'Notes added by EWCC functional test suit.'
+                'notes': 'SupplyCredits notes added by '
+                         'EWCC functional test suit.'
             }
         )
         print('[...]: Subroutine Execute SupplyCredits')

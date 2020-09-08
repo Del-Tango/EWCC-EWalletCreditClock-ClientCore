@@ -75,6 +75,36 @@ class TestEwalletClientExecuteActionUnlinkConversionRecord(unittest.TestCase):
 
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
+            'SupplyCredits',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'credits': 10,
+                'currency': 'RON',
+                'cost': 4.7,
+                'notes': 'SupplyCredits notes added by '
+                         'EWCC functional test suit.'
+            }
+        )
+        print('[...]: Subroutine Execute SupplyCredits')
+        cls.core.execute('SupplyCredits')
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
+            'ConvertCreditsToClock',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'credits': '10',
+                'notes': 'Credit2clock conversion notes added by '
+                         'EWCC functional test suit.'
+            }
+        )
+        print('[...]: Subroutine Execute ConvertCreditsToClock')
+        cls.core.execute('ConvertCreditsToClock')
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
             'ViewConversionSheet',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -87,7 +117,7 @@ class TestEwalletClientExecuteActionUnlinkConversionRecord(unittest.TestCase):
         sheet_data = cls.response.get('sheet_data')
         records = [] if not sheet_data else \
             cls.response['sheet_data']['records']
-        cls.record = int() if not records else int(list(records.keys())[0])
+        cls.record = 1 if not records else int(list(records.keys())[0])
 
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
@@ -109,7 +139,8 @@ class TestEwalletClientExecuteActionUnlinkConversionRecord(unittest.TestCase):
                 'credits': 10,
                 'currency': 'RON',
                 'cost': 4.7,
-                'notes': 'Notes added by EWCC functional test suit.'
+                'notes': 'SupplyCredits notes added by '
+                         'EWCC functional test suit.'
             }
         )
         cls.core.execute('SupplyCredits')
