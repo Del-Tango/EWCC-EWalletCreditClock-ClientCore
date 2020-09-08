@@ -13,6 +13,7 @@ class Config():
     def __init__(self, *args, **kwargs):
         self.config_timestamp = datetime.datetime.now()
         self.config_file = kwargs.get('config_file')
+        self.client_config = kwargs.get('client_config') or {}
         self.log_config = kwargs.get('log_config') or {}
         self.cloud_config = kwargs.get('cloud_config') or {}
         self.initialized = None if not self.config_file else \
@@ -24,6 +25,7 @@ class Config():
         value_set = {
             'config_timestamp': datetime.datetime.now(),
             'config_file': str(),
+            'client_config': dict(),
             'log_config': dict(),
             'cloud_config': dict(),
         }
@@ -43,6 +45,7 @@ class Config():
         settings = {
             'config_timestamp': self.config_timestamp,
             'config_file': self.config_file,
+            'client_config': self.client_config,
             'log_config': self.log_config,
             'cloud_config': self.sanitize_cloud_config_section(),
         }
@@ -59,6 +62,10 @@ class Config():
         config.read(self.config_file)
         if not config:
             return False
+        if config['ClientDetails']:
+            self.client_config = {
+                'debug': config['ClientDetails'].get('debug') or False
+            }
         if config['LogDetails']:
             self.log_config = {
                 'log-name': config['LogDetails'].get('log_name') or 'EWClientCore',

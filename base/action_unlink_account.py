@@ -31,6 +31,7 @@ class UnlinkAccount(ActionBase):
                 "ctype": "action",
                 "action": "unlink",
                 "unlink": "account",
+                "forced_removal": bool(config.client_config.get('debug'))
             }
         }
 

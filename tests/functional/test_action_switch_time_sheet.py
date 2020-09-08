@@ -116,6 +116,7 @@ class TestEwalletClientExecuteActionSwitchTimeSheet(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
+                'forced_removal': True,
             }
         )
         cls.core.execute('UnlinkAccount')
