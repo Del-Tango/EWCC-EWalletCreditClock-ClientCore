@@ -56,7 +56,21 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
                 'user_pass': cls.user1_pass,
             }
         )
-        print('[...]: Subroutine Execute CreateNewAccount')
+        print('[...]: Subroutine Execute CreateNewAccount (1)')
+        cls.core.execute('CreateNewAccount')
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        cls.core.set_values(
+            'CreateNewAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_name': cls.user2_name,
+                'user_email': cls.user2_email,
+                'user_pass': cls.user2_pass,
+            }
+        )
+        print('[...]: Subroutine Execute CreateNewAccount (2)')
         cls.core.execute('CreateNewAccount')
 
         print('[...]: Subroutine Set ResourceInstruction')
@@ -94,7 +108,7 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'pay': cls.user_score,
+                'pay': cls.user2_email,
                 'credits': '10',
             }
         )
