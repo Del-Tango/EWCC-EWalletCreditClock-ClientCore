@@ -227,9 +227,16 @@ class ResourceBase():
 
     def process_api_call(self, instruction_set, response):
         log.debug('')
-        log.info('EWSC - HTTP Response {} -'.format(response.status_code))
-        self.update_last_ewsc_response(instruction_set, response)
-        return self.json_to_dictionary_convertor(response.text)
+        http_response = None if not response or isinstance(response, dict) and\
+                response.get('failed') else response.status_code
+        log.info(
+            'EWSC - HTTP Response {} -'.format(http_response)
+        )
+        update = self.update_last_ewsc_response(instruction_set, response)
+        return self.error_no_http_response_found(
+            instruction_set, response, update
+        ) if not http_response else \
+            self.json_to_dictionary_convertor(response.text)
 
     # CORE
 
@@ -311,6 +318,20 @@ class ResourceBase():
 
     # WARNINGS
 
+    def warning_could_not_update_last_ewsc_resource_response(self, response):
+        core_response = {
+            'failed': True,
+            'warning': 'Something went wrong. '
+                       'Could not update last EWSC resource response values. '
+                       'Details: {}, {}'.format(
+                           response,
+                           None if not response or isinstance(response, dict) \
+                           and response.get('failed') else response.text
+                       )
+        }
+        log.warning(core_response['warning'])
+        return core_response
+
     def warning_could_not_set_instruction(self, instruction_tag):
         core_response = {
             'failed': True,
@@ -330,23 +351,23 @@ class ResourceBase():
         log.error(core_response['warning'])
         return core_response
 
-    def warning_could_not_update_last_ewsc_resource_response(self, response):
-        core_response = {
-            'failed': True,
-            'warning': 'Something went wrong. '
-                       'Could not update last EWSC resource response values. '
-                       'Details: {}, {}'.format(response, response.text)
-        }
-        log.warning(core_response['warning'])
-        return core_response
-
     # ERRORS
 
-    def error_could_not_update_last_instruction_set_execution_timestamp(self):
+    def error_no_http_response_found(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'No HTTP response found. '
+                     'Details: {}'.format(args),
+        }
+        log.error(core_response['error'])
+        return core_response
+
+    def error_could_not_update_last_instruction_set_execution_timestamp(self, *args):
         core_response = {
             'failed': True,
             'error': 'Something went wrong. '
-                     'Could not update last instruction set execution timestamp.',
+                     'Could not update last instruction set execution timestamp. '
+                     'Details: {}'.format(args),
         }
         log.error(core_response['error'])
         return core_response
