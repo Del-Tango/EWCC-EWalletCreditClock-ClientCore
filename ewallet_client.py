@@ -259,6 +259,50 @@ class EWalletClientCore():
         self.update_action_handlers(handler_map)
         return True
 
+    # GENERAL
+
+    def log_warning(self, warning):
+        log.warning(
+            '{} - [ DETAILS ] - {}'.format(
+                warning.get('warning'), warning.get('details')
+            )
+        )
+
+    def log_error(self, error):
+        log.error(
+            '{} - [ DETAILS ] - {}'.format(
+                error.get('error'), error.get('details')
+            )
+        )
+
+    # FORMATTERS
+
+    def format_warning_response(self, **kwargs):
+        log.debug('')
+        core_response = {
+            'failed': kwargs.get('failed'),
+            'warning': kwargs.get('warning'),
+            'details': ''.join(map(str, [
+                item for item in filter(
+                    lambda ch: ch not in "\\(\')\"", str(kwargs.get('details'))
+                )
+            ]))
+        }
+        return core_response
+
+    def format_error_response(self, **kwargs):
+        log.debug('')
+        core_response = {
+            'failed': kwargs.get('failed'),
+            'error': kwargs.get('error'),
+            'details': ''.join(map(str, [
+                item for item in filter(
+                    lambda ch: ch not in "\\(\')\"", str(kwargs.get('details'))
+                )
+            ]))
+        }
+        return core_response
+
     # CORE
 
     # TODO
@@ -287,16 +331,6 @@ class EWalletClientCore():
             return self.error_server_online_check_failure(args, kwargs)
         finally:
             sock.close()
-
-    def error_server_online_check_failure(self, *args):
-        core_response = {
-            'failed': True,
-            'error': 'Something went wrong. '
-                     'Could not check if EWSC services are available. '
-                     'Details: {}'.format(args)
-        }
-        log.error(core_response['error'])
-        return core_response
 
     def previous_action_execution(self, *args, **kwargs):
         log.debug('')
@@ -606,98 +640,112 @@ class EWalletClientCore():
 
     # WARNINGS
 
+
     def warning_no_action_handlers_set_up(self, *args):
-        core_response = {
-            'failed': True,
-            'warning': 'Something went wrong. No Action handlers set up. '
-                       'Details: {}'.format(args),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Something went wrong. '
+                    'No Action handlers set up. '
+                    'Details: {}'.format(args),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_no_event_handlers_set_up(self, *args):
-        core_response = {
-            'failed': True,
-            'warning': 'Something went wrong. No event handlers set up. '
-                       'Details: {}'.format(args),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Something went wrong. '
+                    'No event handlers set up. '
+                    'Details: {}'.format(args),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_no_resource_handlers_found_to_purge(self, *args):
-        core_response = {
-            'failed': True,
-            'warning': 'No resource handlers found to purge. '
-                       'Details: {}'.format(args)
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='No resource handlers found to purge. '
+                    'Details: {}'.format(args)
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_could_not_set_client_core_attribute(self, attribute):
-        core_response = {
-            'failed': True,
-            'warning': 'Something went wrong. '
-                'Could not set client core attribute {}.'.format(attribute),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Something went wrong. '
+                    'Could not set client core attribute {}.'\
+                    .format(attribute),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_no_client_core_fields_set(self, value_set):
-        core_response = {
-            'failed': True,
-            'warning': 'No client core fields updated from value set {}.'\
-                .format(value_set),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='No client core fields updated from value set {}.'\
+                    .format(value_set),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_could_not_setup_event_handler(self, event_label):
-        core_response = {
-            'failed': True,
-            'warning': 'Could not setup event handler for client event {}.'\
-                .format(event_label),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Could not setup event handler for client event {}.'\
+                    .format(event_label),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_not_all_specified_event_handlers_setup(self, event_handlers):
-        core_response = {
-            'failed': True,
-            'warning': 'Something went wrong. '
-                'Could not setup all specified event handlers. '
-                'Details: {}'.format(event_handlers),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Something went wrong. '
+                    'Could not setup all specified event handlers. '
+                    'Details: {}'.format(event_handlers),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_invalid_handler(self, handler_label):
-        core_response = {
-            'failed': True,
-            'warning': 'Invalid handler {}.'.format(handler_label),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Invalid handler {}.'.format(handler_label),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_could_not_setup_action_handler(self, action_label):
-        core_response = {
-            'failed': True,
-            'warning': 'Could not setup action handler for client action {}.'\
-                .format(action_label),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Could not setup action handler for client action {}.'\
+                    .format(action_label),
+        )
+        self.log_warning(core_response)
         return core_response
 
     def warning_not_all_specified_action_handlers_setup(self, action_handlers):
-        core_response = {
-            'failed': True,
-            'warning': 'Something went wrong. '
-                'Could not setup all specified action handlers. '
-                'Details: {}'.format(action_handlers),
-        }
-        log.warning(core_response['warning'])
+        core_response = self.format_warning_response(
+            failed=True,
+            warning='Something went wrong. '
+                    'Could not setup all specified action handlers. '
+                    'Details: {}'.format(action_handlers),
+        )
+        self.log_warning(core_response)
         return core_response
 
     # ERRORS
+
+    def error_server_online_check_failure(self, *args):
+        core_response = {
+            'failed': True,
+            'error': 'Something went wrong. '
+                     'Could not check if EWSC services are available. '
+                     'Details: {}'.format(args)
+        }
+        log.error(core_response['error'])
+        return core_response
 
     def error_could_not_fetch_previous_execution(self, *args):
         core_response = {
