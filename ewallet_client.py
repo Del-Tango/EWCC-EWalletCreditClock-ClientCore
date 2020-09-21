@@ -121,9 +121,9 @@ class EWalletClientCore():
             'RequestClientID': action_request_clientid.RequestClientID,
             'RequestSessionToken': action_request_stoken.RequestSessionToken,
             'CheckCTokenValid': action_check_ctoken_valid.CheckCTokenValid,
-#           'CheckCTokenLinked': action_check_ctoken_linked.CheckCTokenLinked,
+            'CheckCTokenLinked': action_check_ctoken_linked.CheckCTokenLinked,
 #           'CheckCTokenSession': action_check_ctoken_session.CheckCTokenSession,
-#           'CheckCTokenStatus': action_check_ctoken_statusCheckCTokenStatus.
+#           'CheckCTokenStatus': action_check_ctoken_status.CheckCTokenStatus.
 #           'CheckSTokenValid': action_check_stoken_valid.CheckSTokenValid,
 #           'CheckSTokenLinked': action_check_stoken_linked.CheckSTokenLinked,
 #           'CheckSTokenSession': action_check_stoken_session.CheckSTokenSession,
