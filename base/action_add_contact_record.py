@@ -35,7 +35,7 @@ class AddContactRecord(ActionBase):
             }
         }
 
-    def fetch_resource_keys_map(self):
+    def fetch_resource_key_map(self):
         log.debug('')
         return {
             'client_id': '<client-id type-str>',
@@ -51,7 +51,7 @@ class AddContactRecord(ActionBase):
 
     def check_for_illegal_instruction_set_keys(self, instruction_keys):
         log.debug('')
-        valid_resource_keys = list(self.fetch_resource_keys_map().keys())
+        valid_resource_keys = list(self.fetch_resource_key_map().keys())
         valid_keys, invalid_keys = [], []
         for key in instruction_keys:
             if key not in valid_resource_keys:
