@@ -116,7 +116,7 @@ class TestEwalletClientExecuteActionViewTransferRecord(unittest.TestCase):
         sheet_data = cls.response.get('sheet_data')
         records = [] if not sheet_data else \
             cls.response['sheet_data']['records']
-        cls.record = int() if not records else int(list(records.keys())[0])
+        cls.record = int() if not records else int(list(records.keys())[1])
 
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(

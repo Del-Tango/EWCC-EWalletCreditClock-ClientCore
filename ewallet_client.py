@@ -120,6 +120,14 @@ class EWalletClientCore():
         action_labels = {
             'RequestClientID': action_request_clientid.RequestClientID,
             'RequestSessionToken': action_request_stoken.RequestSessionToken,
+            'CheckCTokenValid': action_check_ctoken_valid.CheckCTokenValid,
+#           'CheckCTokenLinked': action_check_ctoken_linked.CheckCTokenLinked,
+#           'CheckCTokenSession': action_check_ctoken_session.CheckCTokenSession,
+#           'CheckCTokenStatus': action_check_ctoken_statusCheckCTokenStatus.
+#           'CheckSTokenValid': action_check_stoken_valid.CheckSTokenValid,
+#           'CheckSTokenLinked': action_check_stoken_linked.CheckSTokenLinked,
+#           'CheckSTokenSession': action_check_stoken_session.CheckSTokenSession,
+#           'CheckSTokenStatus': action_check_stoken_status.CheckSTokenStatus,
             'PauseClockTimer': action_pause_clock_timer.PauseClockTimer,
             'ResumeClockTimer': action_resume_clock_timer.ResumeClockTimer,
             'StartClockTimer': action_start_clock_timer.StartClockTimer,
@@ -639,7 +647,9 @@ class EWalletClientCore():
         return core_response
 
     # WARNINGS
-
+    '''
+    [ TODO ]: Fetch all warning messages from message file by key codes
+    '''
 
     def warning_no_action_handlers_set_up(self, *args):
         core_response = self.format_warning_response(
@@ -737,6 +747,9 @@ class EWalletClientCore():
         return core_response
 
     # ERRORS
+    '''
+    [ TODO ]: Fetch all error messages from message file by key codes
+    '''
 
     def error_server_online_check_failure(self, *args):
         core_response = self.format_error_response(

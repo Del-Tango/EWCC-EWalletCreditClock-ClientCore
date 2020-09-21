@@ -139,5 +139,5 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
         self.assertTrue(isinstance(execute.get('spent_credits'), int))
         self.assertTrue(isinstance(execute.get('transfer_record'), int))
         self.assertTrue(isinstance(execute.get('invoice_record'), int))
-        self.assertTrue(isinstance(execute.get('payed'), str))
+        self.assertTrue(isinstance(execute.get('paid'), str))
         return execute

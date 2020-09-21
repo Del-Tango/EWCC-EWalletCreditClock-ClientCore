@@ -375,8 +375,8 @@ class ResourceBase():
     def error_instruction_set_parameter_not_properly_set(self, *args):
         core_response = {
             'failed': True,
-            'error': 'Instruction set parameter not properly set. Details: {}'\
-                     .format(args)
+            'error': 'Instruction set parameter not properly set. '
+                     'Details: {}'.format(args)
         }
         log.error(core_response['error'])
         return core_response
