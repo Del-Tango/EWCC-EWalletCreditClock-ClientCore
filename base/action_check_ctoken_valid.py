@@ -41,6 +41,12 @@ class CheckCTokenValid(ActionBase):
             }
         }
 
+    def fetch_resource_key_map(self):
+        log.debug('')
+        return {
+            'client_id': '<client-id type-str>',
+        }
+
     # CORE
 
     def purge(self, *args, **kwargs):
@@ -58,5 +64,8 @@ class CheckCTokenValid(ActionBase):
 
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
-        return super(CheckCTokenValid, self).set_values(value_set, *args, **kwargs)
+        valid_keys = list(self.fetch_resource_key_map().keys())
+        return super(CheckCTokenValid, self).set_values(
+            value_set, valid_keys=valid_keys, *args, **kwargs
+        )
 

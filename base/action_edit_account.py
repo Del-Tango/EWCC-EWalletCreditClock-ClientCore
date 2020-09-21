@@ -34,6 +34,18 @@ class EditAccount(ActionBase):
             }
         }
 
+    def fetch_resource_key_map(self):
+        log.debug('')
+        return {
+            'client_id': '<client_id type-str>',
+            'session_token': '<session_token type-str>',
+            'user_alias': '<alias type-str>',
+            'user_email': '<email-address type-str>',
+            'user_name': '<name type-str>',
+            'user_pass': '<password type-str>',
+            'user_phone': '<phone-number type-str>',
+        }
+
     # CORE
 
     def purge(self, *args, **kwargs):
@@ -52,6 +64,7 @@ class EditAccount(ActionBase):
 
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
+        valid_keys = list(self.fetch_resource_key_map().keys())
         return super(EditAccount, self).set_values(
-            value_set, *args, **kwargs
+            value_set, valid_keys=valid_keys, *args, **kwargs
         )

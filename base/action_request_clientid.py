@@ -40,6 +40,10 @@ class RequestClientID(ActionBase):
         }
         return value_set
 
+    def fetch_resource_key_map(self):
+        log.debug('')
+        return {}
+
     # CORE
 
     def purge(self, *args, **kwargs):
@@ -57,5 +61,8 @@ class RequestClientID(ActionBase):
 
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
-        return super(RequestClientID, self).set_values(value_set, *args, **kwargs)
+        valid_keys = list(self.fetch_resource_key_map().keys())
+        return super(RequestClientID, self).set_values(
+            value_set, valid_keys=valid_keys, *args, **kwargs
+        )
 

@@ -33,6 +33,13 @@ class AccountLogout(ActionBase):
             }
         }
 
+    def fetch_resource_key_map(self):
+        log.debug('')
+        return {
+            'client_id': '<client-id type-str>',
+            'session_token': '<session-token type-str>',
+        }
+
     # CORE
 
     def purge(self, *args, **kwargs):
@@ -51,6 +58,7 @@ class AccountLogout(ActionBase):
 
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
+        valid_keys = list(self.fetch_resource_key_map().keys())
         return super(AccountLogout, self).set_values(
-            value_set, *args, **kwargs
+            value_set, valid_keys=valid_keys , *args, **kwargs
         )

@@ -47,26 +47,6 @@ class CheckCTokenStatus(ActionBase):
             'client_id': '<client-id type-str>',
         }
 
-    # CHECKERS
-
-    def check_for_illegal_instruction_set_keys(self, instruction_keys):
-        log.debug('')
-        valid_resource_keys = list(self.fetch_resource_key_map().keys())
-        valid_keys, invalid_keys = [], []
-        for key in instruction_keys:
-            if key not in valid_resource_keys:
-                self.warning_illegal_instruction_set_key_for_resource(
-                    instruction_keys, valid_resource_keys
-                )
-                invalid_keys.append(key)
-                continue
-            valid_keys.append(key)
-        return {
-            'failed': False,
-            'valid_keys': valid_keys,
-            'invalid_keys': invalid_keys,
-        }
-
     # CORE
 
     def purge(self, *args, **kwargs):
@@ -84,7 +64,8 @@ class CheckCTokenStatus(ActionBase):
 
     def set_values(self, value_set, *args, **kwargs):
         log.debug('')
+        valid_keys = list(self.fetch_resource_key_map().keys())
         return super(CheckCTokenStatus, self).set_values(
-            value_set, *args, **kwargs
+            value_set, valid_keys=valid_keys, *args, **kwargs
         )
 
