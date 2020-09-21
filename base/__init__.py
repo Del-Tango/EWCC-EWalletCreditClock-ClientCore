@@ -8,7 +8,7 @@ from . import action_request_stoken
 from . import action_check_ctoken_valid
 from . import action_check_ctoken_linked
 from . import action_check_ctoken_session
-#   from . import action_check_ctoken_status
+from . import action_check_ctoken_status
 #   from . import action_check_stoken_valid
 #   from . import action_check_stoken_linked
 #   from . import action_check_stoken_session
