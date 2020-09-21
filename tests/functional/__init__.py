@@ -8,7 +8,7 @@ from . import test_action_check_ctoken_status
 from . import test_action_check_stoken_valid
 from . import test_action_check_stoken_linked
 from . import test_action_check_stoken_session
-#   from . import test_action_check_stoken_status
+from . import test_action_check_stoken_status
 
 from . import test_action_create_account
 from . import test_action_account_login

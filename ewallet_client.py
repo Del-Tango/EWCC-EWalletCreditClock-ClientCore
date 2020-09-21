@@ -127,7 +127,7 @@ class EWalletClientCore():
             'CheckSTokenValid': action_check_stoken_valid.CheckSTokenValid,
             'CheckSTokenLinked': action_check_stoken_linked.CheckSTokenLinked,
             'CheckSTokenSession': action_check_stoken_session.CheckSTokenSession,
-#           'CheckSTokenStatus': action_check_stoken_status.CheckSTokenStatus,
+            'CheckSTokenStatus': action_check_stoken_status.CheckSTokenStatus,
             'PauseClockTimer': action_pause_clock_timer.PauseClockTimer,
             'ResumeClockTimer': action_resume_clock_timer.ResumeClockTimer,
             'StartClockTimer': action_start_clock_timer.StartClockTimer,
