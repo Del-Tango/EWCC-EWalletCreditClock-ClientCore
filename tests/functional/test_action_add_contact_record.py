@@ -71,6 +71,7 @@ class TestEwalletClientExecuteActionAddContactRecord(unittest.TestCase):
         )
         print('[...]: Subroutine Execute AccountLogin')
         cls.core.execute('AccountLogin')
+
         print('[...]: Subroutine Set ResourceInstruction')
         cls.core.set_values(
             'AddContactRecord',
