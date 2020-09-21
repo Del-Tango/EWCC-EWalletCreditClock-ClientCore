@@ -10,7 +10,7 @@ from . import action_check_ctoken_linked
 from . import action_check_ctoken_session
 from . import action_check_ctoken_status
 from . import action_check_stoken_valid
-#   from . import action_check_stoken_linked
+from . import action_check_stoken_linked
 #   from . import action_check_stoken_session
 #   from . import action_check_stoken_status
 
