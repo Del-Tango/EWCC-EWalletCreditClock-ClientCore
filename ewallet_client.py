@@ -117,9 +117,27 @@ class EWalletClientCore():
 
     def fetch_action_label_map(self):
         log.debug('')
-        action_labels = {
+        labeled_actions = {
             'RequestClientID': action_request_clientid.RequestClientID,
             'RequestSessionToken': action_request_stoken.RequestSessionToken,
+            'CreateMaster': action_create_master_account.CreateMaster,
+#           'AcquireMaster': action_acquire_master.AcquireMaster,
+#           'STokenKeepAlive': action_stoken_keep_alive.STokenKeepAlive,
+#           'CTokenKeepAlive': action_ctoken_keep_alive.CTokenKeepAlive,
+#           'IssueReport': action_issue_report.IssueReport,
+#           'ReleaseMaster': action_release_master.ReleaseMaster,
+#           'MasterAccountLogin': action_master_account_login.MasterAccountLogin,
+#           'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,
+#           'MasterViewAccount': action_master_view_account.MasterViewAccount,
+#           'MasterEditAccount': action_master_edit_account.MasterEditAccount,
+#           'MasterUnlinkAccount': action_master_unlink_account.MasterUnlinkAccount,
+#           'MasterRecoverAccount': action_master_recover_account.MasterRecoverAccount,
+#           'InspectCTokens': action_master_inspect_ctokens.MasterInspectCTokens,
+#           'InspectCToken': action_master_inspect_ctoken.MasterInspectCToken,
+#           'InspectSubPool': action_master_inspect_subordonate_pool.MasterInspectSubPool,
+#           'InspectSubordonate': action_master_inspect_subordonate.MasterInspectSubordonate,
+#           'MasterViewLogin': action_master_view_login.MasterViewLoginRecords,
+#           'MasterViewLogout': action_master_view_logout.MasterViewLogoutRecords,
             'CheckCTokenValid': action_check_ctoken_valid.CheckCTokenValid,
             'CheckCTokenLinked': action_check_ctoken_linked.CheckCTokenLinked,
             'CheckCTokenSession': action_check_ctoken_session.CheckCTokenSession,
@@ -187,7 +205,7 @@ class EWalletClientCore():
             'ViewTransferRecord': action_view_transfer_record.ViewTransferRecord,
             'ViewTransferSheet': action_view_transfer_sheet.ViewTransferSheet,
         }
-        return action_labels
+        return labeled_actions
 
     # TODO
     def fetch_event_label_map(self):
