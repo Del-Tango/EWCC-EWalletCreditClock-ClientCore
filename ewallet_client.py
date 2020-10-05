@@ -124,7 +124,7 @@ class EWalletClientCore():
             'AcquireMaster': action_acquire_master.AcquireMaster,
             'STokenKeepAlive': action_stoken_keep_alive.STokenKeepAlive,
             'CTokenKeepAlive': action_ctoken_keep_alive.CTokenKeepAlive,
-#           'IssueReport': action_issue_report.IssueReport,
+            'IssueReport': action_issue_report.IssueReport,
 #           'ReleaseMaster': action_release_master.ReleaseMaster,
 #           'MasterAccountLogin': action_master_account_login.MasterAccountLogin,
 #           'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,

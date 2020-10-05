@@ -162,6 +162,7 @@ class Config():
     def warning_could_not_reload_settings(self, *args):
         core_response = {
             'failed': True,
+            'level': 'core-config',
             'warning': 'Something went wrong. '
                        'Could not reload settings from configurations file. '
                        'Details: {}'.format(args)
@@ -171,6 +172,7 @@ class Config():
     def warning_config_reload_target_not_a_file(self, *args):
         core_response = {
             'failed': True,
+            'level': 'core-config',
             'warning': 'Config reload target is not a file. Details: {}'.format(args)
         }
         return core_response
@@ -178,6 +180,7 @@ class Config():
     def warning_no_client_core_config_fields_set(self, *args):
         core_response = {
             'failed': True,
+            'level': 'core-config',
             'warning': 'No client core config settings updated. Details: {}'\
                        .format(args),
         }
@@ -187,6 +190,7 @@ class Config():
     def warning_could_not_set_client_core_config_attribute(self, *args):
         core_response = {
             'failed': True,
+            'level': 'core-config',
             'warning': 'Something went wrong. '
                        'Could not set client core config attribute. Details: {}'\
                        .format(args),
@@ -199,6 +203,7 @@ class Config():
     def error_no_config_reload_target_specified(self, *args):
         core_response = {
             'failed': True,
+            'level': 'core-config',
             'error': 'No config reload target specified. Details: {}'.format(args)
         }
 #       log.error(core_response['error'])

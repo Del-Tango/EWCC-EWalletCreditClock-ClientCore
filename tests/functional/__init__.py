@@ -14,6 +14,7 @@ from . import test_action_master_create_account
 from . import test_action_acquire_master
 from . import test_action_stoken_keep_alive
 from . import test_action_ctoken_keep_alive
+from . import test_action_issue_report
 
 from . import test_action_create_account
 from . import test_action_account_login
