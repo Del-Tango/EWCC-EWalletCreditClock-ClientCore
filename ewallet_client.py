@@ -122,7 +122,7 @@ class EWalletClientCore():
             'RequestSessionToken': action_request_stoken.RequestSessionToken,
             'CreateMaster': action_create_master_account.CreateMaster,
             'AcquireMaster': action_acquire_master.AcquireMaster,
-#           'STokenKeepAlive': action_stoken_keep_alive.STokenKeepAlive,
+            'STokenKeepAlive': action_stoken_keep_alive.STokenKeepAlive,
 #           'CTokenKeepAlive': action_ctoken_keep_alive.CTokenKeepAlive,
 #           'IssueReport': action_issue_report.IssueReport,
 #           'ReleaseMaster': action_release_master.ReleaseMaster,

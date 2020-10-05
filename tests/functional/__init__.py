@@ -12,6 +12,7 @@ from . import test_action_check_stoken_status
 
 from . import test_action_master_create_account
 from . import test_action_acquire_master
+from . import test_action_stoken_keep_alive
 
 from . import test_action_create_account
 from . import test_action_account_login

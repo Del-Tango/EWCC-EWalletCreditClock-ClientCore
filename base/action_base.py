@@ -66,6 +66,7 @@ class ActionBase(ResourceBase):
     def warning_illegal_instruction_set_key_for_resource(self, *args):
         core_response = {
             'failed': True,
+            'level': 'action-base',
             'warning': 'Illegal instruction set key found '
                        'for user action handler. '
                        'Details: {}'.format(args)
@@ -81,6 +82,7 @@ class ActionBase(ResourceBase):
     def error_no_valid_instruction_keys_found_for_resource(self, *args):
         core_response = {
             'failed': True,
+            'level': 'action-base',
             'error': 'Something went wrong. '
                      'No valid resource instruction set keys found. '
                      'Details: {}'.format(args)
@@ -91,6 +93,7 @@ class ActionBase(ResourceBase):
     def error_illegal_instruction_set_keys_found(self, *args):
         core_response = {
             'failed': True,
+            'level': 'action-base',
             'error': 'Illegal instruction set keys found for '
                      'user action handler. '
                      'Details: {}'.format(args)
