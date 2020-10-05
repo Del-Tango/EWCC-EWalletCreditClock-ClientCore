@@ -15,7 +15,7 @@ from . import action_check_stoken_session
 from . import action_check_stoken_status
 
 from . import action_create_master_account
-#   from . import action_acquire_master
+from . import action_acquire_master
 #   from . import action_stoken_keep_alive
 #   from . import action_ctoken_keep_alive
 #   from . import action_issue_report
