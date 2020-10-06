@@ -177,7 +177,7 @@ class EWalletClientCore():
             'ReleaseMaster': action_release_master.ReleaseMaster,
             'MasterAccountLogin': action_master_account_login.MasterAccountLogin,
             'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,
-#           'MasterViewAccount': action_master_view_account.MasterViewAccount,
+            'MasterViewAccount': action_master_view_account.MasterViewAccount,
 #           'MasterEditAccount': action_master_edit_account.MasterEditAccount,
 #           'MasterUnlinkAccount': action_master_unlink_account.MasterUnlinkAccount,
 #           'MasterRecoverAccount': action_master_recover_account.MasterRecoverAccount,
