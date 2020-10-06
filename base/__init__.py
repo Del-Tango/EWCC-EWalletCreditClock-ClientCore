@@ -21,7 +21,7 @@ from . import action_ctoken_keep_alive
 from . import action_issue_report
 from . import action_release_master
 from . import action_master_account_login
-#   from . import action_master_account_logout
+from . import action_master_account_logout
 #   from . import action_master_view_account
 #   from . import action_master_edit_account
 #   from . import action_master_unlink_account

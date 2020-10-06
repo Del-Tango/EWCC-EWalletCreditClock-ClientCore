@@ -39,7 +39,9 @@
 
     P.S.[1] - Find a way to make my -= STAGING =- server do weird things it's
     not supposed to be doing, and you get a beaverage of your choice from me
-    personally. I would be very much interested in how you managed.
+    personally. I would be very much interested in how you managed. Messing
+    with the production server will instantly get you the bad boy card, bad
+    things happen to whoever holds the bad boy card.
 
 
     Regards, S:Mx093pk01.
@@ -174,7 +176,7 @@ class EWalletClientCore():
             'IssueReport': action_issue_report.IssueReport,
             'ReleaseMaster': action_release_master.ReleaseMaster,
             'MasterAccountLogin': action_master_account_login.MasterAccountLogin,
-#           'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,
+            'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,
 #           'MasterViewAccount': action_master_view_account.MasterViewAccount,
 #           'MasterEditAccount': action_master_edit_account.MasterEditAccount,
 #           'MasterUnlinkAccount': action_master_unlink_account.MasterUnlinkAccount,
