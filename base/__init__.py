@@ -19,7 +19,7 @@ from . import action_acquire_master
 from . import action_stoken_keep_alive
 from . import action_ctoken_keep_alive
 from . import action_issue_report
-#   from . import action_release_master
+from . import action_release_master
 #   from . import action_master_account_login
 #   from . import action_master_account_logout
 #   from . import action_master_view_account

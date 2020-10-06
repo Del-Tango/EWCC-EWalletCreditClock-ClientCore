@@ -115,6 +115,10 @@ class Config():
 
 #   @pysnooper.snoop()
     def sanitize_cloud_config_section(self):
+        '''
+        [ NOTE ]: Authentication elements are removed from configuration data
+                  set as a security precaution.
+        '''
         cloud_config = self.cloud_config.copy()
         for item in ['ewsc-cert', 'ewsc-master-login', 'ewsc-master-sequence']:
             if item in cloud_config:
@@ -138,7 +142,10 @@ class Config():
 
     def purge(self, *args, **kwargs):
         purge_map = self.fetch_config_purge_map()
+        # [ NOTE ]: If no fields are specified for the purge subroutine,
+        #           all fields are reset to their default values.
         purge_fields = kwargs.get('purge') or purge_map.keys()
+        # [ NOTE ]: Fetch default values of fields prepared for purge.
         value_set = {item: purge_map[item] for item in purge_fields}
         return self.set_values(value_set)
 

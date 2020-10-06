@@ -1,3 +1,50 @@
+'''
+    Hello there, CyberSpace Walker!
+
+    If you're reading this, I can only asume you're wondering around checking
+    the code of libraries you're using, in which case... Thats ma boi! Always
+    read before executing. You my friend, just got the props of the EWCC core
+    developer, so congrats on that.
+
+    Now let's get back to business.
+
+    EWCC-lib (also known as the EWallet Python Client Core) has as its main
+    goal to make the developers' job easier (I can only asume that means you).
+    What job is that you may ask? Well using the most amazing virtual payment
+    system ever, obviously. That would be the EWalletCreditClock VSP-Suit.
+
+    Think of this library as a wrapper around the EWSC REST API. All actions
+    and events have their own handlers that do a number of things for you, from
+    creating the instruction set to recording history. And then there's also
+    that tiny bit of talking to the remote server thing, so yeah, everything is
+    taken care of, I spoil you people.
+
+    These handlers are managed by the EWalletClientCore entity that has the
+    responsabilities of creating, destroying, and configuring the handlers,
+    as well as recording history.
+
+    If you have any other questions regarding the functionality of this thing
+    and you're still too lazy to read the official documentation that some
+    eastern european guy out there worked really hard on, feel free to execute:
+
+        ~$ python3 -m unittest discover
+
+    in the same directory as this file, and then realize you're not getting off
+    that easy and you need to poke around the functional tests.
+    You can find them in the ./tests/functional directory.
+
+    P.S.[0] - To successfully run the functional test suit, you first need to
+    configure the library and point it to either the EWCreditClock staging or
+    production servers (which are awesome, if I may add).
+
+    P.S.[1] - Find a way to make my -= STAGING =- server do weird things it's
+    not supposed to be doing, and you get a beaverage of your choice from me
+    personally. I would be very much interested in how you managed.
+
+
+    Regards, S:Mx093pk01.
+'''
+
 import datetime
 import time
 import json
@@ -125,7 +172,7 @@ class EWalletClientCore():
             'STokenKeepAlive': action_stoken_keep_alive.STokenKeepAlive,
             'CTokenKeepAlive': action_ctoken_keep_alive.CTokenKeepAlive,
             'IssueReport': action_issue_report.IssueReport,
-#           'ReleaseMaster': action_release_master.ReleaseMaster,
+            'ReleaseMaster': action_release_master.ReleaseMaster,
 #           'MasterAccountLogin': action_master_account_login.MasterAccountLogin,
 #           'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,
 #           'MasterViewAccount': action_master_view_account.MasterViewAccount,
