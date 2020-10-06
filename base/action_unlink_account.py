@@ -40,7 +40,7 @@ class UnlinkAccount(ActionBase):
         return {
             'client_id': '<client-id type-str>',
             'session_token': '<session-token type-str>',
-            'forced_removal': '<flag type-bool>',
+            'forced_removal': '<forced-flag type-bool>',
         }
 
     # CORE

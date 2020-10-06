@@ -184,7 +184,7 @@ class EWalletClientCore():
             'InspectCTokens': action_master_inspect_ctokens.MasterInspectCTokens,
             'InspectCToken': action_master_inspect_ctoken.MasterInspectCToken,
             'InspectSubPool': action_master_inspect_subordonate_pool.MasterInspectSubPool,
-#           'InspectSubordonate': action_master_inspect_subordonate.MasterInspectSubordonate,
+            'InspectSubordonate': action_master_inspect_subordonate.MasterInspectSubordonate,
 #           'MasterViewLogin': action_master_view_login.MasterViewLoginRecords,
 #           'MasterViewLogout': action_master_view_logout.MasterViewLogoutRecords,
             'CheckCTokenValid': action_check_ctoken_valid.CheckCTokenValid,
