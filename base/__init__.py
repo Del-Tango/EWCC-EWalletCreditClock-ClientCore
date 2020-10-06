@@ -25,7 +25,7 @@ from . import action_master_account_logout
 from . import action_master_view_account
 from . import action_master_edit_account
 from . import action_master_unlink_account
-#   from . import action_master_recover_account
+from . import action_master_recover_account
 #   from . import action_master_inspect_ctokens
 #   from . import action_master_inspect_ctoken
 #   from . import action_master_inspect_subordonate_pool
