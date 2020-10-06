@@ -1,13 +1,15 @@
 import unittest
+import pysnooper
 
 from ewallet_client import EWalletClientCore
 
 config_file = 'conf/ewcc.conf'
 
 
-class TestEwalletClientExecuteActionCreateMasterAccount(unittest.TestCase):
+class TestEwalletClientExecuteActionMasterUnlinkAccount(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -33,7 +35,7 @@ class TestEwalletClientExecuteActionCreateMasterAccount(unittest.TestCase):
         print('[ + ]: Prerequisits -')
         # Settups all action and event handlers
         print('[...]: Subroutine Setup Handlers')
-        cls.core.setup_handlers(
+        setup_handlers = cls.core.setup_handlers(
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateMaster',
@@ -41,20 +43,22 @@ class TestEwalletClientExecuteActionCreateMasterAccount(unittest.TestCase):
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
-        cls.client_id = cls.core.execute('RequestClientID')
+        client_id = cls.core.execute('RequestClientID')
+        cls.client_id = client_id
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'RequestSessionToken',
             **{
                 'client_id': cls.client_id.get('client_id')
             }
         )
         print('[...]: Subroutine Execute RequestSessionToken')
-        cls.session_token = cls.core.execute('RequestSessionToken')
+        session_token = cls.core.execute('RequestSessionToken')
+        cls.session_token = session_token
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'CreateMaster',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -65,23 +69,26 @@ class TestEwalletClientExecuteActionCreateMasterAccount(unittest.TestCase):
                 'user_alias': cls.user3_alias,
                 'company': cls.user3_company,
                 'address': cls.user3_address,
-                'key': cls.master_key_code,
             }
         )
+        print('[...]: Subroutine Execute CreateMaster')
+        create_master = cls.core.execute('CreateMaster')
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.core.set_values(
+        print('[...]: Subroutine Set ResourceInstruction')
+        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'user_name': cls.user3_email,
+                'user_email': cls.user3_email,
                 'user_pass': cls.user3_pass,
             }
         )
-        cls.core.execute('AccountLogin')
-        cls.core.set_values(
+        print('[...]: Subroutine Execute MasterAccountLogin')
+        master_login = cls.core.execute('MasterAccountLogin')
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        set_values = cls.core.set_values(
             'MasterUnlinkAccount',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -89,18 +96,20 @@ class TestEwalletClientExecuteActionCreateMasterAccount(unittest.TestCase):
                 'forced_removal': True,
             }
         )
-        cls.core.execute('MasterAccountLogin')
 
-    def test_ewcc_set_core_execute_action_create_new_master_account_functional(self):
-        print('\n[ * ]: EWCC Subroutine Execute Action CreateMaster -')
-        execute = self.core.execute('CreateMaster')
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+    def test_ewcc_set_core_execute_action_master_unlink_account_functional(self):
+        print('\n[ * ]: EWCC Subroutine Execute Action MasterUnlinkAccount -')
+        execute = self.core.execute('MasterUnlinkAccount')
         print(
-            "[ I ]: core.execute('CreateMaster') \n"
+            "[ I ]: core.execute('MasterUnlinkAccount') \n"
             + "[ O ]: " + str(execute) + '\n'
         )
         self.assertTrue(isinstance(execute, dict))
         self.assertFalse(execute.get('failed'))
-        self.assertEqual(len(execute.keys()), 3)
+        self.assertEqual(len(execute.keys()), 2)
         self.assertTrue(isinstance(execute.get('account'), str))
-        self.assertTrue(isinstance(execute.get('account_data'), dict))
         return execute

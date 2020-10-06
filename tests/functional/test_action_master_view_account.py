@@ -38,7 +38,7 @@ class TestEwalletClientExecuteActionMasterViewAccount(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateMaster',
                 'MasterAccountLogin', 'MasterAccountLogout',
-                'MasterViewAccount', #'MasterUnlinkAccount'
+                'MasterViewAccount', 'MasterUnlinkAccount'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
@@ -96,7 +96,6 @@ class TestEwalletClientExecuteActionMasterViewAccount(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
         cls.core.set_values(
             'MasterAccountLogout',
             **{
@@ -106,15 +105,15 @@ class TestEwalletClientExecuteActionMasterViewAccount(unittest.TestCase):
         )
         cls.core.execute('MasterAccountLogout')
 
-#       cls.core.set_values(
-#           'MasterUnlinkAccount',
-#           **{
-#               'client_id': cls.client_id.get('client_id'),
-#               'session_token': cls.session_token.get('session_token'),
-#               'forced_removal': True,
-#           }
-#       )
-#       cls.core.execute('UnlinkAccount')
+        cls.core.set_values(
+            'MasterUnlinkAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'forced_removal': True,
+            }
+        )
+        cls.core.execute('MasterUnlinkAccount')
 
     def test_ewcc_set_core_execute_action_master_view_account_functional(self):
         print('\n[ * ]: EWCC Subroutine Execute Action MasterViewAccount -')

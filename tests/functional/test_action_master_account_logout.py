@@ -38,7 +38,7 @@ class TestEwalletClientExecuteActionMasterAccountLogout(unittest.TestCase):
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateMaster',
                 'MasterAccountLogin', 'MasterAccountLogout',
-#               'MasterUnlinkAccount'
+                'MasterUnlinkAccount'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')

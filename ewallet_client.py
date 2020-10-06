@@ -179,7 +179,7 @@ class EWalletClientCore():
             'MasterAccountLogout': action_master_account_logout.MasterAccountLogout,
             'MasterViewAccount': action_master_view_account.MasterViewAccount,
             'MasterEditAccount': action_master_edit_account.MasterEditAccount,
-#           'MasterUnlinkAccount': action_master_unlink_account.MasterUnlinkAccount,
+            'MasterUnlinkAccount': action_master_unlink_account.MasterUnlinkAccount,
 #           'MasterRecoverAccount': action_master_recover_account.MasterRecoverAccount,
 #           'InspectCTokens': action_master_inspect_ctokens.MasterInspectCTokens,
 #           'InspectCToken': action_master_inspect_ctoken.MasterInspectCToken,
