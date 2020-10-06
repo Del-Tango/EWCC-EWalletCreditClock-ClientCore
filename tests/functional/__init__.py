@@ -18,6 +18,7 @@ from . import test_action_master_edit_account
 from . import test_action_master_unlink_account
 from . import test_action_master_recover_account
 from . import test_action_master_inspect_ctokens
+from . import test_action_master_inspect_ctoken
 
 from . import test_action_acquire_master
 from . import test_action_stoken_keep_alive
