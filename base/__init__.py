@@ -31,7 +31,7 @@ from . import action_master_inspect_ctoken
 from . import action_master_inspect_subordonate_pool
 from . import action_master_inspect_subordonate
 from . import action_master_view_login
-#   from . import action_master_view_logout
+from . import action_master_view_logout
 
 from . import action_pause_clock_timer
 from . import action_resume_clock_timer
