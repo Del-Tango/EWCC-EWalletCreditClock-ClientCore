@@ -1,4 +1,5 @@
 import unittest
+import base64
 
 from ewallet_client import EWalletClientCore
 
@@ -25,15 +26,16 @@ class TestEwalletClientExecuteActionIssueReport(unittest.TestCase):
         cls.user3_alias = 'TEWCCM3'
         cls.user3_address = 'Jud.Iasi, Iasi, Str.Canta No.40'
         cls.user3_company = 'EWCC-TestCompany'
+
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
-        # Instantiate CC with specified config file
+        # Instantiate EWCC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
 
         print('[ + ]: Prerequisits -')
-        # Settups all action and event handlers
+
         print('[...]: Subroutine Setup Handlers')
-        cls.core.setup_handlers(
+        setup_handlers = cls.core.setup_handlers(
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'IssueReport',
@@ -43,7 +45,7 @@ class TestEwalletClientExecuteActionIssueReport(unittest.TestCase):
         cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'RequestSessionToken',
             **{
                 'client_id': cls.client_id.get('client_id')
@@ -52,19 +54,26 @@ class TestEwalletClientExecuteActionIssueReport(unittest.TestCase):
         print('[...]: Subroutine Execute RequestSessionToken')
         cls.session_token = cls.core.execute('RequestSessionToken')
 
+        log_file_content = '[ ERROR ]: WTF, I did not expect that to happen...'
+        content_bytes = log_file_content.encode('ascii')
+        base64_bytes = base64.b64encode(content_bytes)
+        base64_message = base64_bytes.decode('ascii')
+        cls.base64_log = base64_message
+
         issue_report = {
-            'name': 'TestIssue',
+            'name': 'EWCC-TestSuit',
             'email': cls.user3_email,
+            'log': cls.base64_log,
             'details': [
                 'Error-Type1', 42, None, {
                     'failed': True,
-                    'warning': 'EWCC functional test suit warning message'
+                    'warning': 'EWCC functional test suit warning message.'
                 },
             ],
         }
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'IssueReport',
             **{
                 'client_id': cls.client_id.get('client_id'),

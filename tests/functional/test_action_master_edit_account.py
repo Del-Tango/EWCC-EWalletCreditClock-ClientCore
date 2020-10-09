@@ -27,13 +27,14 @@ class TestEwalletClientExecuteActionMasterEditAccount(unittest.TestCase):
         cls.user3_alias = 'TEWCCM3'
         cls.user3_address = 'Jud.Iasi, Iasi, Str.Canta No.40'
         cls.user3_company = 'EWCC-TestCompany'
+
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
-        # Instantiate CC with specified config file
+        # Instantiate EWCC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
 
         print('[ + ]: Prerequisits -')
-        # Settups all action and event handlers
+
         print('[...]: Subroutine Setup Handlers')
         setup_handlers = cls.core.setup_handlers(
             handlers=['action'],
@@ -108,16 +109,7 @@ class TestEwalletClientExecuteActionMasterEditAccount(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.core.set_values(
-            'MasterAccountLogout',
-            **{
-                'client_id': cls.client_id.get('client_id'),
-                'session_token': cls.session_token.get('session_token'),
-            }
-        )
-        cls.core.execute('MasterAccountLogout')
-
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'MasterUnlinkAccount',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -125,7 +117,7 @@ class TestEwalletClientExecuteActionMasterEditAccount(unittest.TestCase):
                 'forced_removal': True,
             }
         )
-        cls.core.execute('MasterUnlinkAccount')
+        unlink_master = cls.core.execute('MasterUnlinkAccount')
 
     def test_ewcc_set_core_execute_action_master_edit_account_functional(self):
         print('\n[ * ]: EWCC Subroutine Execute Action MasterEditAccount -')

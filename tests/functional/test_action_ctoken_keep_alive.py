@@ -25,27 +25,27 @@ class TestEwalletClientExecuteActionCTokenKeepAlive(unittest.TestCase):
         cls.user3_alias = 'TEWCCM3'
         cls.user3_address = 'Jud.Iasi, Iasi, Str.Canta No.40'
         cls.user3_company = 'EWCC-TestCompany'
+
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
-        # Instantiate CC with specified config file
+        # Instantiate EWCC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
 
         print('[ + ]: Prerequisits -')
-        # Settups all action and event handlers
+
         print('[...]: Subroutine Setup Handlers')
-        cls.core.setup_handlers(
+        setup_handlers = cls.core.setup_handlers(
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateMaster',
-                'CTokenKeepAlive',
-#               'MasterAccountLogin', 'MasterUnlinkAccount'
+                'CTokenKeepAlive', 'MasterAccountLogin', 'MasterUnlinkAccount'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
         cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'RequestSessionToken',
             **{
                 'client_id': cls.client_id.get('client_id')
@@ -55,7 +55,7 @@ class TestEwalletClientExecuteActionCTokenKeepAlive(unittest.TestCase):
         cls.session_token = cls.core.execute('RequestSessionToken')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'CTokenKeepAlive',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -65,26 +65,26 @@ class TestEwalletClientExecuteActionCTokenKeepAlive(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
-#       cls.core.set_values(
-#           'MasterAccountLogin',
-#           **{
-#               'client_id': cls.client_id.get('client_id'),
-#               'session_token': cls.session_token.get('session_token'),
-#               'user_name': cls.user3_email,
-#               'user_pass': cls.user3_pass,
-#           }
-#       )
-#       cls.core.execute('AccountLogin')
-#       cls.core.set_values(
-#           'MasterUnlinkAccount',
-#           **{
-#               'client_id': cls.client_id.get('client_id'),
-#               'session_token': cls.session_token.get('session_token'),
-#               'forced_removal': True,
-#           }
-#       )
-#       cls.core.execute('UnlinkAccount')
+        set_values = cls.core.set_values(
+            'MasterAccountLogin',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_email': cls.user3_email,
+                'user_pass': cls.user3_pass,
+            }
+        )
+        account_login = cls.core.execute('MasterAccountLogin')
+
+        set_values = cls.core.set_values(
+            'MasterUnlinkAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'forced_removal': True,
+            }
+        )
+        unlink_master = cls.core.execute('MasterUnlinkAccount')
 
     def test_ewcc_set_core_execute_action_ctoken_keep_alive_functional(self):
         print('\n[ * ]: EWCC Subroutine Execute Action CTokenKeepAlive -')

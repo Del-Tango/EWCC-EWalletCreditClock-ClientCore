@@ -20,6 +20,7 @@ class TestEwalletClientExecuteActionMasterUnlinkAccount(unittest.TestCase):
         cls.user2_name = 'EWCC-TestUser2Name'
         cls.user2_email = 'test2@ewcc.com'
         cls.user2_pass = 'abcs!@#$1234'
+        cls.user2_alias = 'TEWCCU2'
 
         cls.user3_name = 'EWCC-TestMaster3'
         cls.user3_email = 'master3@ewcc.com'
@@ -27,13 +28,14 @@ class TestEwalletClientExecuteActionMasterUnlinkAccount(unittest.TestCase):
         cls.user3_alias = 'TEWCCM3'
         cls.user3_address = 'Jud.Iasi, Iasi, Str.Canta No.40'
         cls.user3_company = 'EWCC-TestCompany'
+
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
-        # Instantiate CC with specified config file
+        # Instantiate EWCC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
 
         print('[ + ]: Prerequisits -')
-        # Settups all action and event handlers
+
         print('[...]: Subroutine Setup Handlers')
         setup_handlers = cls.core.setup_handlers(
             handlers=['action'],

@@ -1,4 +1,5 @@
 import unittest
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +9,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionAcquireMasterAccount(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -25,37 +27,54 @@ class TestEwalletClientExecuteActionAcquireMasterAccount(unittest.TestCase):
         cls.user3_alias = 'TEWCCM3'
         cls.user3_address = 'Jud.Iasi, Iasi, Str.Canta No.40'
         cls.user3_company = 'EWCC-TestCompany'
+
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
-        # Instantiate CC with specified config file
+        # Instantiate EWCC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
 
         print('[ + ]: Prerequisits -')
         # Settups all action and event handlers
         print('[...]: Subroutine Setup Handlers')
-        cls.core.setup_handlers(
+        set_values = cls.core.setup_handlers(
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateMaster',
-                'AcquireMaster',
-#               'MasterAccountLogin', 'MasterUnlinkAccount'
+                'AcquireMaster', 'MasterAccountLogin', 'MasterUnlinkAccount'
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
-        cls.client_id = cls.core.execute('RequestClientID')
+        request_ctoken = cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'RequestSessionToken',
             **{
                 'client_id': cls.client_id.get('client_id')
             }
         )
         print('[...]: Subroutine Execute RequestSessionToken')
-        cls.session_token = cls.core.execute('RequestSessionToken')
+        request_stoken = cls.session_token = cls.core.execute('RequestSessionToken')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
+            'CreateMaster',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_name': cls.user3_name,
+                'user_email': cls.user3_email,
+                'user_pass': cls.user3_pass,
+                'user_alias': cls.user3_alias,
+                'company': cls.user3_company,
+                'address': cls.user3_address,
+            }
+        )
+        print('[...]: Subroutine Execute CreateMaster')
+        create_master = cls.core.execute('CreateMaster')
+
+        print('[...]: Subroutine Set ResourceInstruction')
+        set_values = cls.core.set_values(
             'AcquireMaster',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -67,26 +86,26 @@ class TestEwalletClientExecuteActionAcquireMasterAccount(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
-#       cls.core.set_values(
-#           'MasterAccountLogin',
-#           **{
-#               'client_id': cls.client_id.get('client_id'),
-#               'session_token': cls.session_token.get('session_token'),
-#               'user_name': cls.user3_email,
-#               'user_pass': cls.user3_pass,
-#           }
-#       )
-#       cls.core.execute('AccountLogin')
-#       cls.core.set_values(
-#           'MasterUnlinkAccount',
-#           **{
-#               'client_id': cls.client_id.get('client_id'),
-#               'session_token': cls.session_token.get('session_token'),
-#               'forced_removal': True,
-#           }
-#       )
-#       cls.core.execute('UnlinkAccount')
+        set_values = cls.core.set_values(
+            'MasterAccountLogin',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_name': cls.user3_email,
+                'user_pass': cls.user3_pass,
+            }
+        )
+        master_login = cls.core.execute('AccountLogin')
+
+        set_values = cls.core.set_values(
+            'MasterUnlinkAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'forced_removal': True,
+            }
+        )
+        unlink_master = cls.core.execute('MasterUnlinkAccount')
 
     def test_ewcc_set_core_execute_action_acquire_master_account_functional(self):
         print('\n[ * ]: EWCC Subroutine Execute Action AcquireMaster -')

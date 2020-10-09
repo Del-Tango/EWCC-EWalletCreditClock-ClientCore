@@ -16,7 +16,6 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
         cls.user1_name = 'EWCC-TestUser1Name'
         cls.user1_email = 'test1@ewcc.com'
         cls.user1_pass = '1234abcs!@#$'
-        cls.user1_alias = 'TEWCCU1'
 
         cls.user2_name = 'EWCC-TestUser2Name'
         cls.user2_email = 'test2@ewcc.com'
@@ -29,15 +28,16 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
         cls.user3_alias = 'TEWCCM3'
         cls.user3_address = 'Jud.Iasi, Iasi, Str.Canta No.40'
         cls.user3_company = 'EWCC-TestCompany'
+
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
-        # Instantiate CC with specified config file
+        # Instantiate EWCC with specified config file
         cls.core = EWalletClientCore(config_file=config_file)
 
         print('[ + ]: Prerequisits -')
-        # Settups all action and event handlers
+
         print('[...]: Subroutine Setup Handlers')
-        cls.core.setup_handlers(
+        setup_handlers = cls.core.setup_handlers(
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateMaster',
@@ -50,7 +50,7 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
         cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'RequestSessionToken',
             **{
                 'client_id': cls.client_id.get('client_id')
@@ -60,7 +60,7 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
         cls.session_token = cls.core.execute('RequestSessionToken')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'CreateMaster',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -75,10 +75,10 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute CreateMaster')
-        cls.core.execute('CreateMaster')
+        create_master = cls.core.execute('CreateMaster')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -88,10 +88,10 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute MasterAccountLogin')
-        cls.core.execute('MasterAccountLogin')
+        master_login = cls.core.execute('MasterAccountLogin')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'AcquireMaster',
             **{
                 'client_id': cls.client_id.get('client_id'),
@@ -101,10 +101,10 @@ class TestEwalletClientExecuteActionMasterInspectSubordonate(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute AcquireMaster')
-        cls.core.execute('AcquireMaster')
+        acquire_master = cls.core.execute('AcquireMaster')
 
         print('[...]: Subroutine Set ResourceInstruction')
-        cls.core.set_values(
+        set_values = cls.core.set_values(
             'CreateAccount',
             **{
                 'client_id': cls.client_id.get('client_id'),
