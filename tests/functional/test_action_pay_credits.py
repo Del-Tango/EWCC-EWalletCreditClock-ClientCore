@@ -39,7 +39,7 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateAccount',
-                'AccountLogin', 'UnlinkAccount', 'SupplyCredits', 'PayCredits'
+                'AccountLogin', 'UnlinkAccount', 'SupplyCredits', 'PayCredits',
                 'CreateMaster', 'AcquireMaster', 'MasterAccountLogin',
                 'MasterUnlinkAccount',
             ]

@@ -122,7 +122,26 @@ class TestEwalletClientExecuteActionUnlinkAccount(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        pass
+        set_values = cls.core.set_values(
+            'MasterAccountLogin',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_email': cls.user3_email,
+                'user_pass': cls.user3_pass,
+            }
+        )
+        master_login = cls.core.execute('MasterAccountLogin')
+
+        set_values = cls.core.set_values(
+            'MasterUnlinkAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'forced_removal': True,
+            }
+        )
+        unlink_master = cls.core.execute('MasterUnlinkAccount')
 
     def test_ewcc_set_core_execute_action_unlink_account_functional(self):
         print('\n[ * ]: EWCC Subroutine Execute Action UnlinkAccount -')

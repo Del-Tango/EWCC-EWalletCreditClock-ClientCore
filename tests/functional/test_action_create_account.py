@@ -115,7 +115,7 @@ class TestEwalletClientExecuteActionCreateNewAccount(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'user_name': cls.user3_email,
+                'user_email': cls.user3_email,
                 'user_pass': cls.user3_pass,
             }
         )
