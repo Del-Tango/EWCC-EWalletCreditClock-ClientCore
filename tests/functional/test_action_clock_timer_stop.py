@@ -178,7 +178,7 @@ class TestEwalletClientExecuteActionStopClockTimer(unittest.TestCase):
                 'user_pass': cls.user3_pass,
             }
         )
-        master_login = cls.core.execute('AccountLogin')
+        master_login = cls.core.execute('MasterAccountLogin')
 
         set_values = cls.core.set_values(
             'UnlinkAccount',

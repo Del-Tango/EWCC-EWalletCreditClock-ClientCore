@@ -147,14 +147,6 @@ class TestEwalletClientExecuteActionSwitchCreditEWallet(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         set_values = cls.core.set_values(
-            'SwitchCreditEWallet',
-            **{
-                'ewallet_id': cls.current_credit_ewallet,
-            }
-        )
-        switch_ewallet = cls.core.execute('SwitchCreditEWallet')
-
-        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),

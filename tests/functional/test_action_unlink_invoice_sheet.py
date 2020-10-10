@@ -1,4 +1,5 @@
 import unittest
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +9,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionUnlinkInvoiceSheet(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -142,7 +144,17 @@ class TestEwalletClientExecuteActionUnlinkInvoiceSheet(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
+        set_values = cls.core.set_values(
+            'CreateInvoiceSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        create_sheet = cls.core.execute('CreateInvoiceSheet')
+
         set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{

@@ -147,14 +147,6 @@ class TestEwalletClientExecuteActionSwitchCreditClock(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         set_values = cls.core.set_values(
-            'SwitchCreditClock',
-            **{
-                'clock_id': cls.current_clock,
-            }
-        )
-        switch_clock = cls.core.execute('SwitchCreditClock')
-
-        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),

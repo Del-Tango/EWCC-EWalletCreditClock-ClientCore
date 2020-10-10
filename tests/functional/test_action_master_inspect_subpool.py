@@ -130,6 +130,27 @@ class TestEwalletClientExecuteActionMasterInspectSubPool(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         set_values = cls.core.set_values(
+            'AccountLogin',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_email': cls.user2_email,
+                'user_pass': cls.user2_pass,
+            }
+        )
+        account_login = cls.core.execute('AccountLogin')
+
+        set_values = cls.core.set_values(
+            'UnlinkAccount',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'forced_removal': True,
+            }
+        )
+        unlink_account = cls.core.execute('UnlinkAccount')
+
+        set_values = cls.core.set_values(
             'MasterUnlinkAccount',
             **{
                 'client_id': cls.client_id.get('client_id'),

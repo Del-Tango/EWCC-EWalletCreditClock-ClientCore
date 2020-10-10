@@ -1,4 +1,5 @@
 import unittest
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +9,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -45,7 +47,7 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
-        cls.client_id = cls.core.execute('RequestClientID')
+        ctoken = cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -55,7 +57,7 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute RequestSessionToken')
-        cls.session_token = cls.core.execute('RequestSessionToken')
+        stoken = cls.session_token = cls.core.execute('RequestSessionToken')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -130,6 +132,8 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
         print('[...]: Subroutine Execute SupplyCredits')
         supply_credits = cls.core.execute('SupplyCredits')
 
+        print(supply_credits)
+
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
             'ViewInvoiceSheet',
@@ -139,12 +143,15 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute ViewInvoiceSheet')
-        cls.response = cls.core.execute('ViewInvoiceSheet')
+        view_invoice_sheet = cls.response = cls.core.execute('ViewInvoiceSheet')
+
+        print(view_invoice_sheet)
 
         sheet_data = cls.response.get('sheet_data')
         records = [] if not sheet_data else \
             cls.response['sheet_data']['records']
-        cls.record = int() if not records else int(list(records.keys())[0])
+        record_id = cls.record = None if not records else \
+            int(list(records.keys())[0])
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -157,6 +164,7 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'MasterAccountLogin',

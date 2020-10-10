@@ -36,8 +36,7 @@ class TestEwalletClientExecuteActionSTokenKeepAlive(unittest.TestCase):
         setup_handlers = cls.core.setup_handlers(
             handlers=['action'],
             actions=[
-                'RequestClientID', 'RequestSessionToken', 'CreateMaster',
-                'STokenKeepAlive',
+                'RequestClientID', 'RequestSessionToken', 'STokenKeepAlive',
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')

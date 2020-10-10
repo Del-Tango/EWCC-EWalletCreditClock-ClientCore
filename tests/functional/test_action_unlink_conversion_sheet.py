@@ -146,6 +146,15 @@ class TestEwalletClientExecuteActionUnlinkConversionSheet(unittest.TestCase):
 #   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
+            'CreateConversionSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        create_sheet = cls.core.execute('CreateConversionSheet')
+
+        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),

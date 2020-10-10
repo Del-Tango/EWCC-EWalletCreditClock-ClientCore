@@ -1,4 +1,5 @@
 import unittest
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +9,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionViewTimeRecord(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -146,12 +148,12 @@ class TestEwalletClientExecuteActionViewTimeRecord(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute StopClockTimer')
-        cls.response = cls.core.execute('ViewTimeSheet')
+        view_sheet = cls.response = cls.core.execute('ViewTimeSheet')
 
         sheet_data = cls.response.get('sheet_data')
-        records = [] if not sheet_data else \
-            cls.response['sheet_data']['records']
-        cls.record = int() if not records else int(list(records.keys())[0])
+        records = [] if not sheet_data else sheet_data['records']
+        record_id = cls.record = None if not records else \
+            int(list(records.keys())[0])
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -164,6 +166,7 @@ class TestEwalletClientExecuteActionViewTimeRecord(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'MasterAccountLogin',

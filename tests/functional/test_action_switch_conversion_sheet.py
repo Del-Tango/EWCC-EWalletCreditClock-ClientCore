@@ -147,14 +147,6 @@ class TestEwalletClientExecuteActionSwitchConversionSheet(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         set_values = cls.core.set_values(
-            'SwitchConversionSheet',
-            **{
-                'sheet_id': cls.current_conversion_sheet,
-            }
-        )
-        switch_sheet = cls.core.execute('SwitchConversionSheet')
-
-        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),

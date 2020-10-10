@@ -60,17 +60,18 @@ class TestEwalletClientExecuteActionCheckCTokenStatus(unittest.TestCase):
         )
         self.assertTrue(isinstance(execute, dict))
         self.assertFalse(execute.get('failed'))
-        self.assertEqual(len(execute.keys()), 7)
+        self.assertEqual(len(execute.keys()), 9)
 
         self.assertTrue(isinstance(execute.get('client_id'), str))
         self.assertTrue(isinstance(execute.get('session_token'), str))
-        self.assertTrue(isinstance(execute.get('session'), int))
-
+        self.assertTrue(
+            isinstance(execute.get('session'), int) or
+            execute.get('session') == None
+        )
         self.assertTrue(isinstance(execute.get('valid'), bool))
         self.assertTrue(isinstance(execute.get('linked'), bool))
         self.assertTrue(isinstance(execute.get('plugged'), bool))
-
-        self.assertTrue(execute.get('valid'))
-        self.assertTrue(execute.get('linked'))
-        self.assertTrue(execute.get('plugged'))
+        self.assertTrue(isinstance(execute.get('valid'), bool))
+        self.assertTrue(isinstance(execute.get('linked'), bool))
+        self.assertTrue(isinstance(execute.get('plugged'), bool))
         return execute

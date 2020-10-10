@@ -1,5 +1,5 @@
 import unittest
-import pysnooper
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -146,16 +146,8 @@ class TestEwalletClientExecuteActionSwitchContactList(unittest.TestCase):
         )
 
     @classmethod
-    @pysnooper.snoop()
+#   @pysnooper.snoop()
     def tearDownClass(cls):
-        set_values = cls.core.set_values(
-            'SwitchContactList',
-            **{
-                'list_id': cls.current_contact_list,
-            }
-        )
-        switch_list = cls.core.execute('SwitchContactList')
-
         set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{

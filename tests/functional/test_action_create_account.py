@@ -1,4 +1,6 @@
 import unittest
+# import time
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +10,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionCreateNewAccount(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -43,7 +46,7 @@ class TestEwalletClientExecuteActionCreateNewAccount(unittest.TestCase):
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
-        cls.client_id = cls.core.execute('RequestClientID')
+        client_id = cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -53,7 +56,7 @@ class TestEwalletClientExecuteActionCreateNewAccount(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute RequestSessionToken')
-        cls.session_token = cls.core.execute('RequestSessionToken')
+        session_token = cls.session_token = cls.core.execute('RequestSessionToken')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -98,13 +101,14 @@ class TestEwalletClientExecuteActionCreateNewAccount(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'AccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'user_email': cls.user1_name,
+                'user_email': cls.user1_email,
                 'user_pass': cls.user1_pass,
             }
         )
@@ -119,7 +123,7 @@ class TestEwalletClientExecuteActionCreateNewAccount(unittest.TestCase):
                 'user_pass': cls.user3_pass,
             }
         )
-        master_login = cls.core.execute('AccountLogin')
+        master_login = cls.core.execute('MasterAccountLogin')
 
         set_values = cls.core.set_values(
             'UnlinkAccount',

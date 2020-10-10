@@ -1,4 +1,5 @@
 import unittest
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +9,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -45,7 +47,7 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
             ]
         )
         print('[...]: Subroutine Execute RequestClientId')
-        cls.client_id = cls.core.execute('RequestClientID')
+        client_id = cls.client_id = cls.core.execute('RequestClientID')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -55,7 +57,7 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
             }
         )
         print('[...]: Subroutine Execute RequestSessionToken')
-        cls.session_token = cls.core.execute('RequestSessionToken')
+        session_token = cls.session_token = cls.core.execute('RequestSessionToken')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -121,12 +123,12 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'user_email': cls.user1_email,
-                'user_pass': cls.user1_pass,
+                'user_email': cls.user2_email,
+                'user_pass': cls.user2_pass,
             }
         )
-        print('[...]: Subroutine Execute AccountLogin')
-        account1_login = cls.core.execute('AccountLogin')
+        print('[...]: Subroutine Execute AccountLogin (1)')
+        account2_login = cls.core.execute('AccountLogin')
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
@@ -150,12 +152,13 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
-                'pay': cls.user2_email,
+                'pay': cls.user1_email,
                 'credits': '10',
             }
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'MasterAccountLogin',
@@ -176,7 +179,20 @@ class TestEwalletClientExecuteActionPayCredits(unittest.TestCase):
                 'forced_removal': True,
             }
         )
-        unlink_account = cls.core.execute('UnlinkAccount')
+        unlink_account2 = cls.core.execute('UnlinkAccount')
+
+        set_values = cls.core.set_values(
+            'AccountLogin',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+                'user_email': cls.user1_email,
+                'user_pass': cls.user1_pass,
+            }
+        )
+        account1_login = cls.core.execute('AccountLogin')
+
+        unlink_account1 = cls.core.execute('UnlinkAccount')
 
         set_values = cls.core.set_values(
             'MasterUnlinkAccount',

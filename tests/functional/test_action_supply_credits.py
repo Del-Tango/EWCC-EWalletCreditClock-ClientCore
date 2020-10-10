@@ -1,4 +1,6 @@
 import unittest
+# import time
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +10,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionSupplyCredits(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -129,6 +132,7 @@ class TestEwalletClientExecuteActionSupplyCredits(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'MasterAccountLogin',

@@ -143,6 +143,15 @@ class TestEwalletClientExecuteActionUnlinkTransferSheet(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         set_values = cls.core.set_values(
+            'CreateTransferSheet',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        create_sheet = cls.core.execute('CreateTransferSheet')
+
+        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),

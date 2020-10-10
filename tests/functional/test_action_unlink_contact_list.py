@@ -143,6 +143,15 @@ class TestEwalletClientExecuteActionUnlinkContactList(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         set_values = cls.core.set_values(
+            'CreateContactList',
+            **{
+                'client_id': cls.client_id.get('client_id'),
+                'session_token': cls.session_token.get('session_token'),
+            }
+        )
+        create_list = cls.core.execute('CreateContactList')
+
+        set_values = cls.core.set_values(
             'MasterAccountLogin',
             **{
                 'client_id': cls.client_id.get('client_id'),

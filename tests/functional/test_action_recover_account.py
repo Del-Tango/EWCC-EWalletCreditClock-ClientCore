@@ -1,4 +1,5 @@
 import unittest
+# import pysnooper
 
 from ewallet_client import EWalletClientCore
 
@@ -8,6 +9,7 @@ config_file = 'conf/ewcc.conf'
 class TestEwalletClientExecuteActionRecoverAccount(unittest.TestCase):
 
     @classmethod
+#   @pysnooper.snoop()
     def setUpClass(cls):
         cls.user_score = 'ewsc.systemcore@alvearesolutions.ro'
 
@@ -41,7 +43,7 @@ class TestEwalletClientExecuteActionRecoverAccount(unittest.TestCase):
                 'RequestClientID', 'RequestSessionToken', 'CreateAccount',
                 'AccountLogin', 'RecoverAccount', 'AccountLogout',
                 'CreateMaster', 'AcquireMaster', 'MasterAccountLogin',
-                'MasterUnlinkAccount',
+                'MasterUnlinkAccount', 'UnlinkAccount',
             ]
         )
 
@@ -122,6 +124,7 @@ class TestEwalletClientExecuteActionRecoverAccount(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'MasterAccountLogin',
