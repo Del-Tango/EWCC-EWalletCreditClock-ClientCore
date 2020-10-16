@@ -52,7 +52,7 @@ class RequestClientID(ActionBase):
             *args, purge=purge_fields, purge_map=purge_map
         )
 
-    def execute(self, **kwargs):
+    def execute(self, *args, **kwargs):
         log.debug('RequestClientID')
         instruction_set = self.fetch_instruction_set()
         return super(RequestClientID, self).execute(instruction_set)

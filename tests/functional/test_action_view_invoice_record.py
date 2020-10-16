@@ -132,8 +132,6 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
         print('[...]: Subroutine Execute SupplyCredits')
         supply_credits = cls.core.execute('SupplyCredits')
 
-        print(supply_credits)
-
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
             'ViewInvoiceSheet',
@@ -144,8 +142,6 @@ class TestEwalletClientExecuteActionViewInvoiceRecord(unittest.TestCase):
         )
         print('[...]: Subroutine Execute ViewInvoiceSheet')
         view_invoice_sheet = cls.response = cls.core.execute('ViewInvoiceSheet')
-
-        print(view_invoice_sheet)
 
         sheet_data = cls.response.get('sheet_data')
         records = [] if not sheet_data else \

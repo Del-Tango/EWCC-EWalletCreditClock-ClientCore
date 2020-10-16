@@ -41,7 +41,7 @@ class TestEwalletClientExecuteActionSwitchActiveSessionUser(unittest.TestCase):
             handlers=['action'],
             actions=[
                 'RequestClientID', 'RequestSessionToken', 'CreateAccount',
-                'AccountLogin', 'UnlinkAccount', 'SwitchSessionUser',
+                'AccountLogin', 'UnlinkAccount', 'SwitchAccount',
                 'ViewAccount', 'CreateMaster', 'AcquireMaster',
                 'MasterAccountLogin', 'MasterUnlinkAccount',
             ]
@@ -145,7 +145,7 @@ class TestEwalletClientExecuteActionSwitchActiveSessionUser(unittest.TestCase):
 
         print('[...]: Subroutine Set ResourceInstruction')
         set_values = cls.core.set_values(
-            'SwitchSessionUser',
+            'SwitchAccount',
             **{
                 'client_id': cls.client_id.get('client_id'),
                 'session_token': cls.session_token.get('session_token'),
@@ -201,10 +201,10 @@ class TestEwalletClientExecuteActionSwitchActiveSessionUser(unittest.TestCase):
         unlink_master = cls.core.execute('MasterUnlinkAccount')
 
     def test_ewcc_set_core_execute_action_switch_session_user_functional(self):
-        print('\n[ * ]: EWCC Subroutine Execute Action SwitchSessionUser -')
-        execute = self.core.execute('SwitchSessionUser')
+        print('\n[ * ]: EWCC Subroutine Execute Action SwitchAccount -')
+        execute = self.core.execute('SwitchAccount')
         print(
-            "[ I ]: core.execute('SwitchSessionUser') \n"
+            "[ I ]: core.execute('SwitchAccount') \n"
             + "[ O ]: " + str(execute) + '\n'
         )
         self.assertTrue(isinstance(execute, dict))

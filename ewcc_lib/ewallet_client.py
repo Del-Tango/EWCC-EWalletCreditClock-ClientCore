@@ -215,7 +215,7 @@ class EWalletClientCore():
             'EditAccount': action_edit_account.EditAccount,
             'PayCredits': action_pay_credits.PayCredits,
             'SupplyCredits': action_supply_credits.SupplyCredits,
-            'SwitchSessionUser': action_switch_active_session_user.SwitchSessionUser,
+            'SwitchAccount': action_switch_active_session_user.SwitchSessionUser,
             'SwitchContactList': action_switch_contact_list.SwitchContactList,
             'SwitchConversionSheet': action_switch_conversion_sheet.SwitchConversionSheet,
             'SwitchCreditClock': action_switch_credit_clock.SwitchCreditClock,
@@ -589,12 +589,12 @@ class EWalletClientCore():
         return resource_map[args[0]].last_response(**kwargs)
 
 #   @pysnooper.snoop()
-    def execute(self, target_label):
+    def execute(self, target_label, *args, **kwargs):
         log.debug('EWalletClientCore')
         resource_map = self.fetch_complete_resource_map()
         if target_label not in resource_map:
             return self.error_invalid_target_label(target_label)
-        execute = resource_map[target_label].execute()
+        execute = resource_map[target_label].execute(*args, **kwargs)
         self.update_core_state_from_resource(target_label, resource_map)
         return execute
 

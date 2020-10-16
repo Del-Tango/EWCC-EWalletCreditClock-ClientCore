@@ -36,7 +36,7 @@ class IssueReport(ActionBase):
             'name': '<issue-label type-str>',
             'log': '<b64enc-ewcc-log type-str>',
             'email': '<contact-email type-str>',
-            'details': '<miscellaneous-data type-str>',
+            'details': '<miscellaneous-data type-list>',
         }
         return issue
 
