@@ -5,15 +5,10 @@ import base64
 from .config import Config
 from .action_base import ActionBase
 
-#   config_file = __name__.split('.')
-#   config_file.remove(config_file[-1])
-#   config_file.remove(config_file[-1])
-#   file_path = 'conf/ewcc.conf' if not config_file else \
-#       '/'.join(item for item in config_file) + 'conf/ewcc.conf'
-#   config = Config(config_file=file_path)
-#   config.config_init(config_file=file_path)
-#   log = logging.getLogger(config.log_config.get('log-name') or __name__)
-log = logging.getLogger(__name__)
+config = Config()
+config.config_init()
+log_name = config.log_config['log-name']
+log = logging.getLogger(log_name or __name__)
 
 
 class IssueReport(ActionBase):
@@ -31,12 +26,12 @@ class IssueReport(ActionBase):
     # FETCHERS
 
     def fetch_ewcc_log_file(self):
-        log.debug('')
+        log.debug('IssueReport')
         log_file_path = self.config.log_config.get('log-path')
         return log_file_path
 
     def fetch_default_issue_report_format(self):
-        log.debug('')
+        log.debug('IssueReport')
         issue = {
             'name': '<issue-label type-str>',
             'log': '<b64enc-ewcc-log type-str>',
@@ -46,7 +41,7 @@ class IssueReport(ActionBase):
         return issue
 
     def fetch_resource_purge_map(self):
-        log.debug('')
+        log.debug('IssueReport')
         return {
             'instruction_set': {
                 'controller': 'client',
@@ -57,7 +52,7 @@ class IssueReport(ActionBase):
         }
 
     def fetch_resource_key_map(self):
-        log.debug('')
+        log.debug('IssueReport')
         return {
             'instruction_set': '<instruction-set type-dict>',
             'client_id': '<client-id type-str>',
@@ -69,7 +64,7 @@ class IssueReport(ActionBase):
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def check_issue_report_format(self, value_set):
-        log.debug('')
+        log.debug('IssueReport')
         if not value_set.get('issue') or \
                 not isinstance(value_set['issue'], dict):
             return self.error_invalid_issue_report_format(value_set)
@@ -99,7 +94,7 @@ class IssueReport(ActionBase):
         }
 
     def check_for_illegal_instruction_set_keys(self, instruction_keys, valid_key_set):
-        log.debug('')
+        log.debug('IssueReport')
         return super(IssueReport, self).check_for_illegal_instruction_set_keys(
             instruction_keys, valid_key_set
         )
@@ -107,20 +102,20 @@ class IssueReport(ActionBase):
     # GENERAL
 
     def read_file_content(self, file_path):
-        log.debug('')
+        log.debug('IssueReport')
         with open(file_path, 'r') as fl:
             file_content = fl.read()
         return file_content
 
     def encode_text_base64(self, message):
-        log.debug('')
+        log.debug('IssueReport')
         message_bytes = message.encode('ascii')
         base64_bytes = base64.b64encode(message_bytes)
         base64_message = base64_bytes.decode('ascii')
         return base64_message
 
     def encode_base64_ewcc_log_content(self):
-        log.debug('')
+        log.debug('IssueReport')
         log_file = self.fetch_ewcc_log_file()
         file_content = self.read_file_content(log_file)
         encoded_content = self.encode_text_base64(file_content)

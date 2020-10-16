@@ -94,31 +94,31 @@ class EWalletClientCore():
     # FETCHERS
 
     def fetch_last_core_execution_type(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.execution_category
 
     def fetch_last_executed_resource(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.previous_label
 
     def fetch_last_executed_action(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.previous_action
 
     def fetch_last_executed_event(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.previous_event
 
     def fetch_action_resource_handler_map(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.actions
 
     def fetch_event_resource_handler_map(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.events
 
     def fetch_ewallet_client_core_purge_map(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return {
             'write_date': datetime.datetime.now(),
             'config_file': str(),
@@ -136,14 +136,14 @@ class EWalletClientCore():
         }
 
     def fetch_complete_resource_map(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         resource_map = self.actions.copy()
         resource_map.update(self.events)
         return resource_map
 
 #   @pysnooper.snoop()
     def fetch_ewallet_client_core_values(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         value_set = {
             'create_date': self.create_date,
             'write_date': self.write_date,
@@ -164,7 +164,7 @@ class EWalletClientCore():
         return value_set
 
     def fetch_action_label_map(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         labeled_actions = {
             'RequestClientID': action_request_clientid.RequestClientID,
             'RequestSessionToken': action_request_stoken.RequestSessionToken,
@@ -257,14 +257,14 @@ class EWalletClientCore():
 
     # TODO
     def fetch_event_label_map(self):
-        log.debug('TODO - Client events not yet supported.')
+        log.debug('EWalletClientCore - TODO - Client events not yet supported.')
         event_labels = {}
         return event_labels
 
     # UPDATERS
 
     def update_core_state_from_resource(self, target_label, resource_map):
-        log.debug('')
+        log.debug('EWalletClientCore')
         resource_state = resource_map[target_label].state()
         resource_type = self.check_resource_type(target_label)
         if resource_type == 'action':
@@ -284,7 +284,7 @@ class EWalletClientCore():
         return self.set_client_core_values(resource_state)
 
     def update_write_date(self, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         try:
             self.write_date = kwargs.get('write_date') \
                 or datetime.datetime.now()
@@ -293,7 +293,7 @@ class EWalletClientCore():
         return True
 
     def update_event_handlers(self, extension):
-        log.debug('')
+        log.debug('EWalletClientCore')
         try:
             self.events.update(extension)
         except:
@@ -301,7 +301,7 @@ class EWalletClientCore():
         return True
 
     def update_action_handlers(self, extension):
-        log.debug('')
+        log.debug('EWalletClientCore')
         try:
             self.actions.update(extension)
         except:
@@ -311,7 +311,7 @@ class EWalletClientCore():
     # CHECKERS
 
     def check_resource_type(self, target_label):
-        log.debug('')
+        log.debug('EWalletClientCore')
         actions = self.fetch_action_label_map()
         events = self.fetch_event_label_map()
         if target_label in actions.keys():
@@ -324,12 +324,12 @@ class EWalletClientCore():
     # COMPUTERS
 
     def compute_setup_event_handler(self, handler_map):
-        log.debug('')
+        log.debug('EWalletClientCore')
         self.update_event_handlers(handler_map)
         return True
 
     def compute_setup_action_handler(self, handler_map):
-        log.debug('')
+        log.debug('EWalletClientCore')
         self.update_action_handlers(handler_map)
         return True
 
@@ -352,7 +352,7 @@ class EWalletClientCore():
     # FORMATTERS
 
     def format_warning_response(self, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         core_response = {
             'failed': kwargs.get('failed'),
             'warning': kwargs.get('warning'),
@@ -365,7 +365,7 @@ class EWalletClientCore():
         return core_response
 
     def format_error_response(self, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         core_response = {
             'failed': kwargs.get('failed'),
             'error': kwargs.get('error'),
@@ -384,12 +384,12 @@ class EWalletClientCore():
         log.debug('TODO - Not yet implemented.')
 
     def config_reload(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.config.config_reload(*args, **kwargs)
 
 #   @pysnooper.snoop()
     def server_online(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             response = sock.connect_ex((
@@ -407,21 +407,21 @@ class EWalletClientCore():
             sock.close()
 
     def previous_action_execution(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return {
             'failed': False,
             'action': self.fetch_last_executed_action(),
         }
 
     def previous_event_execution(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return {
             'failed': False,
             'event': self.fetch_last_executed_event(),
         }
 
     def previous_execution(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return {
             'failed': False,
             'execution': self.fetch_last_core_execution_type(),
@@ -430,7 +430,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def previous(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         if not args:
             return self.previous_execution(**kwargs)
         if 'action' in args:
@@ -447,7 +447,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def action_resource_purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         resource_map = self.fetch_action_resource_handler_map()
         try:
             purge_map = {
@@ -460,7 +460,7 @@ class EWalletClientCore():
         return purge_map
 
     def event_resource_purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         resource_map = self.fetch_event_resource_handler_map()
         try:
             purge_map = {
@@ -474,7 +474,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def total_resource_purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         resource_map = self.fetch_complete_resource_map()
         try:
             purge_map = {
@@ -490,7 +490,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def resource_purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         if kwargs.get('actions'):
             return self.action_resource_purge(*args, **kwargs)
         elif kwargs.get('events'):
@@ -498,18 +498,18 @@ class EWalletClientCore():
         return self.total_resource_purge(*args, **kwargs)
 
     def config_purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.config.purge(*args, **kwargs)
 
     def core_purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         purge_map = self.fetch_ewallet_client_core_purge_map()
         purge_fields = kwargs.get('purge') or purge_map.keys()
         value_set = {item: purge_map[item] for item in purge_fields}
         return self.set_values('Core', **value_set)
 
     def total_purge(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         try:
             purge = {
                 'core': self.core_purge(),
@@ -521,7 +521,7 @@ class EWalletClientCore():
         return purge
 
     def purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         if not args and not kwargs:
             return self.total_purge()
         elif args and args[0] in ['Core', '']:
@@ -537,7 +537,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def set_values(self, target_label, **value_set):
-        log.debug('')
+        log.debug('EWalletClientCore')
         if not target_label or isinstance(target_label, str) and \
                 target_label == 'Core':
             return self.set_client_core_values(value_set)
@@ -549,7 +549,7 @@ class EWalletClientCore():
         return resource_map[target_label].set_values(value_set)
 
     def state(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         if not args or args[0] in ['Core', '']:
             return {
                 'failed': False,
@@ -561,7 +561,7 @@ class EWalletClientCore():
         return resource_map[args[0]].state()
 
     def response_core(self):
-        log.debug('')
+        log.debug('EWalletClientCore')
         response = {
             'failed': False,
             'execute': self.execution_category,
@@ -576,7 +576,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def last_response(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         if not args and not kwargs:
             return self.response_core()
         if not args:
@@ -590,7 +590,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def execute(self, target_label):
-        log.debug('')
+        log.debug('EWalletClientCore')
         resource_map = self.fetch_complete_resource_map()
         if target_label not in resource_map:
             return self.error_invalid_target_label(target_label)
@@ -599,11 +599,11 @@ class EWalletClientCore():
         return execute
 
     def set_client_core_config_values(self, value_set):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.config.set_values(value_set)
 
     def set_client_core_values(self, value_set):
-        log.debug('')
+        log.debug('EWalletClientCore')
         fields_set = []
         for field in value_set:
             try:
@@ -619,11 +619,11 @@ class EWalletClientCore():
             }
 
     def new_handlers(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return self.setup_handlers(*args, **kwargs)
 
     def new(self, new='handlers', *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         handlers = {
             'handlers': self.new_handlers,
             'issue-report': self.new_issue_report,
@@ -633,7 +633,7 @@ class EWalletClientCore():
         return handlers[new](*args, **kwargs)
 
     def setup_event_handlers(self, events='all', **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         event_map = self.fetch_event_label_map()
         setup_count = 0
         handler_set = events if isinstance(events, list) \
@@ -659,7 +659,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def setup_action_handlers(self, actions='all', *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         action_map = self.fetch_action_label_map()
         setup_count = 0
         handler_set = actions if isinstance(actions, list) \
@@ -684,7 +684,7 @@ class EWalletClientCore():
         return action_handlers
 
     def setup_all_handlers(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         return {
             'failed': False,
             'actions': self.setup_action_handlers(actions='all'),
@@ -693,7 +693,7 @@ class EWalletClientCore():
 
 #   @pysnooper.snoop()
     def setup_handlers(self, *args, **kwargs):
-        log.debug('')
+        log.debug('EWalletClientCore')
         handlers, response = {
             'action': self.setup_action_handlers,
             'event': self.setup_event_handlers,

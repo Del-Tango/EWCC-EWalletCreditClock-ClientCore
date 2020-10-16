@@ -12,7 +12,8 @@ class Config():
 
     def __init__(self, *args, **kwargs):
         self.config_timestamp = datetime.datetime.now()
-        self.config_file = kwargs.get('config_file', str())
+        self.config_file = kwargs.get('config_file') or \
+            self.fetch_default_config_file()
         self.client_config = kwargs.get('client_config') or {
             'lib-dir': os.path.dirname(os.path.abspath(__file__))
         }
@@ -58,17 +59,24 @@ class Config():
         current_dir = os.path.dirname(os.path.abspath(__file__))
         segmented = current_dir.split('/')
         segmented.remove(segmented[-1])
-        lib_dir = '/'.join(item for item in segmented) + '/conf/ewcc.conf'
+        lib_dir = '/'.join(item for item in segmented)
         return lib_dir
+
+    def fetch_default_config_file(self):
+        lib_dir = self.fetch_default_library_directory()
+        config_file = lib_dir + '/conf/ewcc.conf'
+        return config_file
 
     # SETUP
 
 #   @pysnooper.snoop()
     def config_init(self, config_file=None):
-        if not self.config_file:
-            if not config_file or not isinstance(config_file, str):
-                return False
-            self.config_file = config_file
+        conf = self.fetch_default_config_file() if not config_file else \
+            config_file
+        if not conf and not self.config_file:
+            return False
+        elif conf and isinstance(conf, str):
+            self.config_file = conf
         config.read(self.config_file)
         if not config:
             return False

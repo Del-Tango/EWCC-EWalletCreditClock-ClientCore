@@ -3,15 +3,10 @@ import logging
 from .config import Config
 from .action_base import ActionBase
 
-#   config_file = __name__.split('.')
-#   config_file.remove(config_file[-1])
-#   config_file.remove(config_file[-1])
-#   file_path = 'conf/ewcc.conf' if not config_file else \
-#       '/'.join(item for item in config_file) + '/conf/ewcc.conf'
-#   config = Config(config_file=file_path)
-#   config.config_init(config_file=file_path)
-#   log = logging.getLogger(config.log_config.get('log-name') or __name__)
-log = logging.getLogger(__name__)
+config = Config()
+config.config_init()
+log_name = config.log_config['log-name']
+log = logging.getLogger(log_name or __name__)
 
 
 class ViewContactList(ActionBase):
@@ -25,7 +20,7 @@ class ViewContactList(ActionBase):
     # FETCHERS
 
     def fetch_resource_purge_map(self):
-        log.debug('')
+        log.debug('ViewContactList')
         return {
             'instruction_set': {
                 "controller": "client",
@@ -37,7 +32,7 @@ class ViewContactList(ActionBase):
         }
 
     def fetch_resource_key_map(self):
-        log.debug('')
+        log.debug('ViewContactList')
         return {
             'instruction_set': '<instruction-set type-dict>',
             'client_id': '<client-id type-str>',
@@ -47,7 +42,7 @@ class ViewContactList(ActionBase):
     # CORE
 
     def purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('ViewContactList')
         purge_map = self.fetch_resource_purge_map()
         purge_fields = kwargs.get('purge') or purge_map.keys()
         return super(ViewContactList, self).purge(
@@ -55,13 +50,13 @@ class ViewContactList(ActionBase):
         )
 
     def execute(self, *args, **kwargs):
-        log.debug('')
+        log.debug('ViewContactList')
         instruction_set = self.fetch_instruction_set() \
             if not args or not isinstance(args[0], dict) else args[0]
         return super(ViewContactList, self).execute(instruction_set)
 
     def set_values(self, value_set, *args, **kwargs):
-        log.debug('')
+        log.debug('ViewContactList')
         valid_keys = list(self.fetch_resource_key_map().keys())
         return super(ViewContactList, self).set_values(
             value_set, valid_keys=valid_keys, *args, **kwargs

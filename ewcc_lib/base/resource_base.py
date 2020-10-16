@@ -8,15 +8,10 @@ from base64 import b64encode
 
 from .config import Config
 
-#   config_file = __name__.split('.')
-#   config_file.remove(config_file[-1])
-#   config_file.remove(config_file[-1])
-#   file_path = 'conf/ewcc.conf' if not config_file else \
-#       '/'.join(item for item in config_file) + '/conf/ewcc.conf'
-#   config = Config(config_file=file_path)
-#   config.config_init(config_file=file_path)
-#   log = logging.getLogger(config.log_config.get('log-name') or __name__)
-log = logging.getLogger(__name__)
+config = Config()
+config.config_init()
+log_name = config.log_config['log-name']
+log = logging.getLogger(log_name or __name__)
 
 
 class ResourceBase():
@@ -35,11 +30,11 @@ class ResourceBase():
     # FETCHERS
 
     def fetch_resource_instruction_set(self):
-        log.debug('')
+        log.debug('ResourceBase')
         return self.instruction_set
 
     def fetch_resource_purge_map(self):
-        log.debug('')
+        log.debug('ResourceBase')
         return {
             'write_date': datetime.datetime.now(),
             'instruction_set_response': dict(),
@@ -50,7 +45,7 @@ class ResourceBase():
         }
 
     def fetch_resource_values(self):
-        log.debug('')
+        log.debug('ResourceBase')
         return {
             'create_date': self.create_date,
             'write_date': self.write_date,
@@ -63,7 +58,7 @@ class ResourceBase():
         }
 
     def fetch_instruction_set(self):
-        log.debug('')
+        log.debug('ResourceBase')
         instruction_set = self.instruction_set
         if not isinstance(instruction_set, dict):
             return self.error_instruction_set_parameter_not_properly_set(
@@ -74,18 +69,18 @@ class ResourceBase():
         return instruction_set
 
     def fetch_supported_http_request_methods(self):
-        log.debug('')
+        log.debug('ResourceBase')
         return ['POST', 'GET']
 
 #   @pysnooper.snoop()
     def fetch_action_instruction_set_target_url(self):
-        log.debug('')
+        log.debug('ResourceBase')
         return self.config.cloud_config['ewsc-url']
 
     # FORMATTERS
 
     def format_master_account_credentials_for_basic_auth(self, login, sequence):
-        log.debug('')
+        log.debug('ResourceBase')
         if not isinstance(login, str) or not isinstance(sequence, str):
             return self.error_invalid_basic_http_authorization_credentials(login, sequence)
         master_creds = '{}:{}'.format(login, sequence)
@@ -94,7 +89,7 @@ class ResourceBase():
         return basic_auth_creds or False
 
     def format_data_set_for_api_call(self, values):
-        log.debug('')
+        log.debug('ResourceBase')
         master_creds = self.format_master_account_credentials_for_basic_auth(
             self.config._fetch_ewsc_master_login(),
             self.config._fetch_ewsc_master_sequence()
@@ -115,7 +110,7 @@ class ResourceBase():
     # UPDATERS
 
     def update_last_executed_instruction_set(self, instruction_set):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             self.instruction_set = instruction_set
         except:
@@ -124,7 +119,7 @@ class ResourceBase():
         return True
 
     def update_last_write_date(self):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             self.write_date = datetime.datetime.now()
         except:
@@ -133,7 +128,7 @@ class ResourceBase():
         return True
 
     def update_last_ewsc_response_raw(self, response):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             self.response = response
         except:
@@ -142,7 +137,7 @@ class ResourceBase():
         return True
 
     def update_last_ewsc_instruction_set_response(self, response):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             self.instruction_set_response = self.json_to_dictionary_convertor(response.text)
         except:
@@ -151,7 +146,7 @@ class ResourceBase():
         return True
 
     def update_last_ewsc_response_status(self, instruction_set_response):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             self.status = False if instruction_set_response.get('failed') \
                 else True
@@ -163,7 +158,7 @@ class ResourceBase():
         return True
 
     def update_last_instruction_set_execution_timestamp(self):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             self.timestamp = datetime.datetime.now()
         except:
@@ -172,7 +167,7 @@ class ResourceBase():
         return True
 
     def update_last_ewsc_response(self, instruction_set, response):
-        log.debug('')
+        log.debug('ResourceBase')
         updates = {
             'response': self.update_last_ewsc_response_raw(response),
             'instruction_set': self.update_last_executed_instruction_set(instruction_set),
@@ -190,7 +185,7 @@ class ResourceBase():
     # GENERAL
 
     def dictionary_to_json_convertor(self, target_dict):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             converted = json.dumps(target_dict)
         except:
@@ -198,7 +193,7 @@ class ResourceBase():
         return converted
 
     def json_to_dictionary_convertor(self, target_json):
-        log.debug('')
+        log.debug('ResourceBase')
         try:
             converted = json.loads(target_json)
         except:
@@ -208,7 +203,7 @@ class ResourceBase():
     # CLOUD
 
     def issue_api_call(self, method, target_url, data_set):
-        log.debug('')
+        log.debug('ResourceBase')
         supported_request_methods = self.fetch_supported_http_request_methods()
         if method not in supported_request_methods:
             return self.error_unsupported_http_request_method(
@@ -227,7 +222,7 @@ class ResourceBase():
         return api_call
 
     def process_api_call(self, instruction_set, response):
-        log.debug('')
+        log.debug('ResourceBase')
         http_response = None if not response or isinstance(response, dict) and\
                 response.get('failed') else response.status_code
         log.info(
@@ -243,7 +238,7 @@ class ResourceBase():
 
 #   @pysnooper.snoop()
     def execute(self, *args, **kwargs):
-        log.debug('')
+        log.debug('ResourceBase')
         instruction_set = self.fetch_resource_instruction_set() \
             if not args or not isinstance(args[0], dict) else args[0]
         if 'instruction_set' in instruction_set \
@@ -257,7 +252,7 @@ class ResourceBase():
         return self.process_api_call(instruction_set, api_call)
 
     def previous(self):
-        log.debug('')
+        log.debug('ResourceBase')
         previous = self.fetch_instruction_set()
         if not previous or isinstance(previous, dict) and \
                 previous.get('failed'):
@@ -267,7 +262,7 @@ class ResourceBase():
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def purge(self, *args, **kwargs):
-        log.debug('')
+        log.debug('ResourceBase')
         purge_map = self.fetch_resource_purge_map()
         if kwargs.get('purge_map'):
             purge_map.update(kwargs['purge_map'])
@@ -280,7 +275,7 @@ class ResourceBase():
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def set_instructions(self, value_set, *args, **kwargs):
-        log.debug('')
+        log.debug('ResourceBase')
         instruction_tags = {item: value_set[item] for item in value_set} \
             if 'instruction_set' not in value_set else {
                 item: value_set['instruction_set'][item]
@@ -301,7 +296,7 @@ class ResourceBase():
 
 #   @pysnooper.snoop('logs/ewcc.log')
     def set_values(self, value_set, *args, **kwargs):
-        log.debug('')
+        log.debug('ResourceBase')
         if not kwargs.get('resource'):
             return self.set_instructions(value_set, *args, **kwargs)
         fields_set = []
@@ -318,12 +313,12 @@ class ResourceBase():
         }
 
     def last_response(self, raw=False):
-        log.debug('')
+        log.debug('ResourceBase')
         return self.instruction_set_response if not raw else self.response
 
 #   @pysnooper.snoop()
     def state(self, **kwargs):
-        log.debug('')
+        log.debug('ResourceBase')
         state = kwargs.get('state') or {}
         state.update(self.fetch_resource_values())
         return state

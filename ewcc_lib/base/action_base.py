@@ -4,25 +4,20 @@ import logging
 from .config import Config
 from .resource_base import ResourceBase
 
-#   config_file = __name__.split('.')
-#   config_file.remove(config_file[-1])
-#   config_file.remove(config_file[-1])
-#   file_path = 'conf/ewcc.conf' if not config_file else \
-#       '/'.join(item for item in config_file) + '/conf/ewcc.conf'
-#   config = Config(config_file=file_path)
-#   config.config_init(config_file=file_path)
-#   log = logging.getLogger(config.log_config.get('log-name') or __name__)
-log = logging.getLogger(__name__)
+config = Config()
+config.config_init()
+log_name = config.log_config['log-name']
+log = logging.getLogger(log_name or __name__)
 
 
 class ActionBase(ResourceBase):
 
     def __init__(self, *args, **kwargs):
-        log.debug('')
+        log.debug('ActionBase')
         return super(ActionBase, self).__init__(*args, **kwargs)
 
     def check_for_illegal_instruction_set_keys(self, instruction_keys, valid_key_set):
-        log.debug('')
+        log.debug('ActionBase')
         valid_keys, invalid_keys = [], []
         for key in instruction_keys:
             if key not in valid_key_set:
@@ -39,11 +34,11 @@ class ActionBase(ResourceBase):
         }
 
     def execute(self, *args, **kwargs):
-        log.debug('')
+        log.debug('ActionBase')
         return super(ActionBase, self).execute(*args, **kwargs)
 
     def set_values(self, value_set, *args, **kwargs):
-        log.debug('')
+        log.debug('ActionBase')
         if not kwargs.get('valid_keys') and \
                 not isinstance(kwargs.get('valid_keys'), list):
             return self.error_no_valid_instruction_keys_found_for_resource(
