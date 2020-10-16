@@ -1,7 +1,7 @@
 import unittest
 # import pysnooper
 
-from ewallet_client import EWalletClientCore
+from ewcc_lib import ewallet_client
 
 config_file = 'conf/ewcc.conf'
 
@@ -32,7 +32,7 @@ class TestEwalletClientExecuteActionSwitchTimeSheet(unittest.TestCase):
         cls.master_key_code = 'EWSC-Master-Key-Code'
 
         # Instantiate EWCC with specified config file
-        cls.core = EWalletClientCore(config_file=config_file)
+        cls.core = ewallet_client.EWalletClientCore()
 
         print('[ + ]: Prerequisits -')
 
@@ -147,6 +147,7 @@ class TestEwalletClientExecuteActionSwitchTimeSheet(unittest.TestCase):
         )
 
     @classmethod
+#   @pysnooper.snoop()
     def tearDownClass(cls):
         set_values = cls.core.set_values(
             'MasterAccountLogin',

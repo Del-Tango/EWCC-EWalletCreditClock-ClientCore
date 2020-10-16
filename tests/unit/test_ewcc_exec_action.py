@@ -1,6 +1,6 @@
 import unittest
 
-from ewallet_client import EWalletClientCore
+from ewcc_lib import ewallet_client
 
 config_file = 'conf/ewcc.conf'
 
@@ -9,8 +9,7 @@ class TestEwalletClientExecute(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # Instantiate CC with specified config file
-        cls.core = EWalletClientCore(config_file=config_file)
+        cls.core = ewallet_client.EWalletClientCore()
         # Settups all action and event handlers
         cls.core.setup_handlers()
 

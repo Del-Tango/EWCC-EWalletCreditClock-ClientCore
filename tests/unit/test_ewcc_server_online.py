@@ -1,16 +1,13 @@
 import unittest
 
-from ewallet_client import EWalletClientCore
-
-config_file = 'conf/ewcc.conf'
+from ewcc_lib import ewallet_client
 
 
 class TestEwalletClientServerOnline(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # Instantiate CC with specified config file
-        cls.core = EWalletClientCore(config_file=config_file)
+        cls.core = ewallet_client.EWalletClientCore()
 
     @classmethod
     def tearDownClass(cls):
@@ -18,7 +15,7 @@ class TestEwalletClientServerOnline(unittest.TestCase):
 
     def test_ewcc_server_online_unit(self):
         print('[ * ]: EWCC Subroutine ServerOnline -')
-        self.core.config_reload(config_file)
+        self.core.config_reload(self.core.config_file)
         response = self.core.server_online()
         print(
             "[ I ]: core.server_online() \n"

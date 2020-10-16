@@ -1,6 +1,6 @@
 import unittest
 
-from ewallet_client import EWalletClientCore
+from ewcc_lib import ewallet_client
 
 config_file = 'conf/ewcc.conf'
 
@@ -20,7 +20,7 @@ class TestEwalletClientExecuteActionCheckSTokenStatus(unittest.TestCase):
         cls.user2_pass = 'abcs!@#$1234'
 
         # Instantiate CC with specified config file
-        cls.core = EWalletClientCore(config_file=config_file)
+        cls.core = ewallet_client.EWalletClientCore()
 
         print('[ + ] Prerequisits -')
         # Settups all action and event handlers
